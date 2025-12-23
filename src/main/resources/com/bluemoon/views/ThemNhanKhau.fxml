@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" prefHeight="500.0" prefWidth="400.0" spacing="20.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bluemoon.controllers.ThemNhanKhauController">
+    <padding>
+        <Insets bottom="20.0" left="30.0" right="30.0" top="20.0" />
+    </padding>
+    <children>
+        <Label text="THÊM NHÂN KHẨU MỚI" textFill="#2c3e50">
+            <font>
+                <Font name="System Bold" size="20.0" />
+            </font>
+        </Label>
+
+        <GridPane hgap="10.0" vgap="15.0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="120.0" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <Label text="Họ và Tên (*):" />
+                <TextField fx:id="tfHoTen" promptText="Nguyễn Văn A" GridPane.columnIndex="1" />
+
+                <Label text="Số CCCD/CMND:" GridPane.rowIndex="1" />
+                <TextField fx:id="tfCCCD" promptText="Nhập số thẻ..." GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                <Label text="Ngày sinh (*):" GridPane.rowIndex="2" />
+                <DatePicker fx:id="dpNgaySinh" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                <Label text="Giới tính:" GridPane.rowIndex="3" />
+                <ComboBox fx:id="cbGioiTinh" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                <Label text="Quê quán:" GridPane.rowIndex="4" />
+                <TextField fx:id="tfQueQuan" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+                <Label text="Nghề nghiệp:" GridPane.rowIndex="5" />
+                <TextField fx:id="tfNgheNghiep" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+
+                <Label text="Mã Hộ Khẩu:" GridPane.rowIndex="6" />
+                <TextField fx:id="tfMaHoKhau" promptText="Để trống nếu chưa có" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            </children>
+        </GridPane>
+
+        <HBox alignment="CENTER" spacing="20.0">
+            <children>
+                <Button fx:id="btnHuy" mnemonicParsing="false" onAction="#handleCancel" prefHeight="35.0" prefWidth="100.0" style="-fx-background-color: #95a5a6;" text="Hủy bỏ" textFill="WHITE" />
+                <Button mnemonicParsing="false" onAction="#handleSave" prefHeight="35.0" prefWidth="100.0" style="-fx-background-color: #2ecc71;" text="Lưu" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                </Button>
+            </children>
+            <VBox.margin>
+                <Insets top="10.0" />
+            </VBox.margin>
+        </HBox>
+    </children>
+</VBox>

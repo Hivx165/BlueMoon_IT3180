@@ -14,18 +14,18 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-public class PhiDichVuController {
+public class PhiQuanLyController {
 
-    @FXML private TableView<PhiDichVuDisplay> tablePhiDichVu;
-    @FXML private TableColumn<PhiDichVuDisplay, String> colMaHo;
-    @FXML private TableColumn<PhiDichVuDisplay, Float> colDienTich;
-    @FXML private TableColumn<PhiDichVuDisplay, Float> colDonGia;
-    @FXML private TableColumn<PhiDichVuDisplay, Float> colTongTien;
-    @FXML private TableColumn<PhiDichVuDisplay, Integer> colNam;
+    @FXML private TableView<PhiQuanLyDisplay> tablePhiQuanLy;
+    @FXML private TableColumn<PhiQuanLyDisplay, String> colMaHo;
+    @FXML private TableColumn<PhiQuanLyDisplay, Float> colDienTich;
+    @FXML private TableColumn<PhiQuanLyDisplay, Float> colDonGia;
+    @FXML private TableColumn<PhiQuanLyDisplay, Float> colTongTien;
+    @FXML private TableColumn<PhiQuanLyDisplay, Integer> colNam;
 
     @FXML private TextField searchField;
 
-    private ObservableList<PhiDichVuDisplay> list = FXCollections.observableArrayList();
+    private ObservableList<PhiQuanLyDisplay> list = FXCollections.observableArrayList();
 
     public void initialize() {
         // Cấu hình cột
@@ -43,14 +43,14 @@ public class PhiDichVuController {
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement()) {
 
-            // JOIN bảng phidichvu và hokhau để lấy diện tích thực tế
-            String sql = "SELECT pdv.MaHoKhau, hk.DienTichHo, pdv.GiaPhi, pdv.TienNopMoiThang, pdv.Nam " +
-                    "FROM phidichvu pdv " +
-                    "JOIN hokhau hk ON pdv.MaHoKhau = hk.MaHoKhau";
+            // JOIN bảng phiquanly và hokhau
+            String sql = "SELECT pql.MaHoKhau, hk.DienTichHo, pql.GiaPhi, pql.TienNopMoiThang, pql.Nam " +
+                    "FROM phiquanly pql " +
+                    "JOIN hokhau hk ON pql.MaHoKhau = hk.MaHoKhau";
 
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
-                list.add(new PhiDichVuDisplay(
+                list.add(new PhiQuanLyDisplay(
                         rs.getString("MaHoKhau"),
                         rs.getFloat("DienTichHo"),
                         rs.getFloat("GiaPhi"),
@@ -58,7 +58,7 @@ public class PhiDichVuController {
                         rs.getInt("Nam")
                 ));
             }
-            tablePhiDichVu.setItems(list);
+            tablePhiQuanLy.setItems(list);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -68,34 +68,34 @@ public class PhiDichVuController {
     @FXML
     private void handleSearch() {
         String key = searchField.getText().toLowerCase();
-        ObservableList<PhiDichVuDisplay> filter = FXCollections.observableArrayList();
-        for (PhiDichVuDisplay p : list) {
+        ObservableList<PhiQuanLyDisplay> filter = FXCollections.observableArrayList();
+        for (PhiQuanLyDisplay p : list) {
             if (p.getMaHo().toLowerCase().contains(key)) {
                 filter.add(p);
             }
         }
-        tablePhiDichVu.setItems(filter);
+        tablePhiQuanLy.setItems(filter);
     }
 
     @FXML private void handleRefresh() { loadData(); }
+
     @FXML private void handleAdd() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Tính năng");
+        alert.setTitle("Thông báo");
         alert.setHeaderText(null);
-        alert.setContentText("Chức năng tự động tạo phí cho năm mới đang phát triển.");
+        alert.setContentText("Tính năng tạo phí quản lý tự động sẽ được cập nhật sau.");
         alert.showAndWait();
     }
-    @FXML private void handleEdit() { /* Logic cập nhật */ }
 
     // Class nội bộ để hiển thị
-    public static class PhiDichVuDisplay {
+    public static class PhiQuanLyDisplay {
         private final SimpleStringProperty maHo;
         private final SimpleFloatProperty dienTich;
         private final SimpleFloatProperty donGia;
         private final SimpleFloatProperty tongTien;
         private final SimpleIntegerProperty nam;
 
-        public PhiDichVuDisplay(String ma, float dt, float dg, float tong, int nam) {
+        public PhiQuanLyDisplay(String ma, float dt, float dg, float tong, int nam) {
             this.maHo = new SimpleStringProperty(ma);
             this.dienTich = new SimpleFloatProperty(dt);
             this.donGia = new SimpleFloatProperty(dg);

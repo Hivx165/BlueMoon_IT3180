@@ -10,11 +10,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bluemoon.controllers.PhiDongGopController">
+<AnchorPane prefHeight="600.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bluemoon.controllers.PhiQuanLyController">
     <children>
         <VBox layoutX="20.0" layoutY="20.0" spacing="15.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
             <children>
-                <Label text="QUẢN LÝ PHÍ ĐÓNG GÓP (TỰ NGUYỆN)" textFill="#2c3e50">
+                <Label text="QUẢN LÝ PHÍ QUẢN LÝ (VẬN HÀNH)" textFill="#2c3e50">
                     <font>
                         <Font name="System Bold" size="24.0" />
                     </font>
@@ -23,24 +23,25 @@
                 <HBox alignment="CENTER_LEFT" spacing="15.0">
                     <children>
                         <Label text="Tìm kiếm:" />
-                        <TextField fx:id="searchField" prefWidth="250.0" promptText="Nhập tên quỹ hoặc mã hộ..." />
+                        <TextField fx:id="searchField" prefWidth="250.0" promptText="Nhập mã hộ khẩu..." />
                         <Button mnemonicParsing="false" onAction="#handleSearch" style="-fx-background-color: #3498db;" text="Tìm" textFill="WHITE" />
                         <Button mnemonicParsing="false" onAction="#handleRefresh" style="-fx-background-color: #f39c12;" text="Làm mới" textFill="WHITE" />
                     </children>
                 </HBox>
 
-                <TableView fx:id="tablePhiDongGop" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                <TableView fx:id="tablePhiQuanLy" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                     <columns>
                         <TableColumn fx:id="colMaHo" prefWidth="100.0" text="Mã Hộ" />
-                        <TableColumn fx:id="colTenKhoanThu" prefWidth="250.0" text="Tên Khoản Đóng Góp" />
-                        <TableColumn fx:id="colSoTien" prefWidth="150.0" text="Số Tiền (VND)" />
-                        <TableColumn fx:id="colNgayDong" prefWidth="150.0" text="Ngày Đóng" />
+                        <TableColumn fx:id="colDienTich" prefWidth="100.0" text="Diện Tích (m2)" />
+                        <TableColumn fx:id="colDonGia" prefWidth="120.0" text="Đơn Giá / m2" />
+                        <TableColumn fx:id="colTongTien" prefWidth="150.0" text="Phải Thu (Tháng)" />
+                        <TableColumn fx:id="colNam" prefWidth="80.0" text="Năm" />
                     </columns>
                 </TableView>
 
                 <HBox alignment="CENTER_RIGHT" spacing="15.0">
                     <children>
-                        <Button mnemonicParsing="false" onAction="#handleAdd" prefHeight="35.0" style="-fx-background-color: #2ecc71;" text="Thêm Đóng Góp Mới" textFill="WHITE">
+                        <Button mnemonicParsing="false" onAction="#handleAdd" prefHeight="35.0" style="-fx-background-color: #2ecc71;" text="Tạo Phí Năm Nay" textFill="WHITE">
                             <font><Font name="System Bold" size="13.0" /></font>
                         </Button>
                     </children>
