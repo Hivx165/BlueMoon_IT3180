@@ -173,9 +173,6 @@ INSERT INTO phisinhhoat (MaHoKhau, Thang, Nam, TienDien, TienNuoc, TongTien) VAL
 ('HK03', 11, 2025, 300000, 50000, 350000);
 
 GO
--- =============================================
--- KẾT THÚC SCRIPT
--- =============================================
 
 USE BlueMoonDB;
 GO
