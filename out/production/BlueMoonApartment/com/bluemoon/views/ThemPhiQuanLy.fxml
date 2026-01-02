@@ -11,12 +11,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" prefHeight="450.0" prefWidth="500.0" spacing="20.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bluemoon.controllers.ThemPhiDichVuController">
+<VBox alignment="TOP_CENTER" prefHeight="450.0" prefWidth="500.0" spacing="20.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bluemoon.controllers.ThemPhiQuanLyController">
     <padding>
         <Insets bottom="20.0" left="30.0" right="30.0" top="20.0" />
     </padding>
     <children>
-        <Label text="THIẾT LẬP PHÍ DỊCH VỤ" textFill="#2c3e50">
+        <Label text="THIẾT LẬP PHÍ QUẢN LÝ" textFill="#2c3e50">
             <font>
                 <Font name="System Bold" size="20.0" />
             </font>
@@ -47,7 +47,7 @@
                 <TextField fx:id="tfDienTich" editable="false" promptText="Tự động hiện sau khi kiểm tra" style="-fx-background-color: #ecf0f1;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
                 <Label text="Đơn giá / m2 (*):" GridPane.rowIndex="2" />
-                <TextField fx:id="tfDonGia" promptText="VD: 5000" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <TextField fx:id="tfDonGia" promptText="VD: 7000" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
                 <Label text="Năm thu phí (*):" GridPane.rowIndex="3" />
                 <TextField fx:id="tfNam" promptText="VD: 2025" GridPane.columnIndex="1" GridPane.rowIndex="3" />

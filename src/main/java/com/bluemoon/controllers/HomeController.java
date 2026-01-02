@@ -19,25 +19,19 @@ import java.sql.Statement;
 
 public class HomeController {
 
-    // Liên kết với giao diện
     @FXML
-    private BorderPane mainBorderPane; // Khung chứa nội dung chính
+    private BorderPane mainBorderPane; // Vùng chứa nội dung chính
 
-    @FXML
-    private Label nhanKhauCount;
-    @FXML
-    private Label hoKhauCount;
-    @FXML
-    private Label welcomeLabel;
+    @FXML private Label nhanKhauCount;
+    @FXML private Label hoKhauCount;
+    @FXML private Label welcomeLabel;
 
-    // Biến lưu giữ giao diện Dashboard (để khi bấm trang chủ không phải load lại)
-    private Parent dashboardView;
+    private Parent dashboardView; // Lưu lại trang Dashboard để tái sử dụng
 
-    // --- KHỞI TẠO ---
     public void initialize() {
-        System.out.println(">> HomeController khởi động...");
+        System.out.println(">> HomeController đã khởi động.");
 
-        // 1. Lưu lại giao diện Dashboard ban đầu
+        // 1. Lưu giao diện Dashboard ban đầu (để nút Trang chủ quay về đây)
         if (mainBorderPane != null) {
             dashboardView = (Parent) mainBorderPane.getCenter();
         }
@@ -46,18 +40,18 @@ public class HomeController {
         loadStatistics();
     }
 
-    // --- LOGIC TẢI DỮ LIỆU ---
+    // --- HÀM TẢI SỐ LIỆU CHO DASHBOARD ---
     private void loadStatistics() {
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement()) {
 
-            // Đếm nhân khẩu
+            // Đếm Nhân khẩu
             ResultSet rs1 = stmt.executeQuery("SELECT COUNT(*) FROM nhankhau");
             if (rs1.next()) {
                 nhanKhauCount.setText(String.valueOf(rs1.getInt(1)));
             }
 
-            // Đếm hộ khẩu
+            // Đếm Hộ khẩu
             ResultSet rs2 = stmt.executeQuery("SELECT COUNT(*) FROM hokhau");
             if (rs2.next()) {
                 hoKhauCount.setText(String.valueOf(rs2.getInt(1)));
@@ -65,18 +59,18 @@ public class HomeController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            System.err.println("Lỗi tải thống kê: " + e.getMessage());
+            System.err.println("Lỗi tải thống kê Dashboard: " + e.getMessage());
         }
     }
 
-    // --- XỬ LÝ SỰ KIỆN MENU ---
+    // --- CÁC HÀM XỬ LÝ SỰ KIỆN MENU (OnAction) ---
 
     @FXML
     private void handleTrangChu(ActionEvent event) {
         System.out.println(">> Click: Trang Chủ");
         if (dashboardView != null) {
             mainBorderPane.setCenter(dashboardView);
-            loadStatistics(); // Cập nhật lại số liệu
+            loadStatistics(); // Cập nhật lại số liệu mới nhất
         }
     }
 
@@ -107,17 +101,24 @@ public class HomeController {
     @FXML
     private void handlePhiDongGop(ActionEvent event) {
         System.out.println(">> Click: Phí Đóng Góp");
-        // Gọi đến file view mới đổi tên
         switchView("PhiDongGopView.fxml");
     }
 
     @FXML
+    private void handleThongKe(ActionEvent event) {
+        System.out.println(">> Click: Thống Kê");
+        switchView("ThongKeView.fxml");
+    }
+
+    @FXML
     private void handleLogout(ActionEvent event) {
-        System.out.println(">> Click: Đăng xuất");
+        System.out.println(">> Click: Đăng Xuất");
         try {
+            // 1. Đóng cửa sổ hiện tại
             Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             currentStage.close();
 
+            // 2. Mở màn hình Login
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bluemoon/views/LoginView.fxml"));
             Parent root = loader.load();
             Stage stage = new Stage();
@@ -125,29 +126,32 @@ public class HomeController {
             stage.setScene(new Scene(root));
             stage.setResizable(false);
             stage.show();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    // --- HÀM HỖ TRỢ CHUYỂN CẢNH ---
+    // --- HÀM CHUYỂN CẢNH DÙNG CHUNG ---
     private void switchView(String fxmlFileName) {
         try {
             String path = "/com/bluemoon/views/" + fxmlFileName;
             URL fileUrl = getClass().getResource(path);
 
             if (fileUrl == null) {
-                System.err.println("❌ LỖI: Không tìm thấy file " + path);
+                System.err.println("❌ LỖI: Không tìm thấy file giao diện: " + path);
                 return;
             }
 
             FXMLLoader loader = new FXMLLoader(fileUrl);
             Parent view = loader.load();
-            mainBorderPane.setCenter(view); // Thay thế nội dung ở giữa
+
+            // Thay thế nội dung vùng giữa (Center)
+            mainBorderPane.setCenter(view);
 
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("❌ Lỗi khi tải giao diện: " + e.getMessage());
+            System.err.println("❌ Lỗi khi tải file FXML: " + e.getMessage());
         }
     }
 }

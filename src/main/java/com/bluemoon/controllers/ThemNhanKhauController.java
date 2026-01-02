@@ -15,63 +15,84 @@ public class ThemNhanKhauController {
     @FXML private TextField tfCCCD;
     @FXML private DatePicker dpNgaySinh;
     @FXML private ComboBox<String> cbGioiTinh;
+
+    // Các trường mới thêm
+    @FXML private TextField tfSDT;
+    @FXML private TextField tfQuanHe;
+    @FXML private TextArea taGhiChu;
+
     @FXML private TextField tfQueQuan;
     @FXML private TextField tfNgheNghiep;
     @FXML private TextField tfMaHoKhau;
     @FXML private Button btnHuy;
 
     public void initialize() {
-        // Khởi tạo ComboBox Giới tính
         cbGioiTinh.getItems().addAll("Nam", "Nữ", "Khác");
         cbGioiTinh.getSelectionModel().selectFirst();
     }
 
     @FXML
     private void handleSave() {
-        // 1. Kiểm tra dữ liệu đầu vào
-        if (tfHoTen.getText().isEmpty() || dpNgaySinh.getValue() == null) {
-            showAlert("Lỗi", "Vui lòng nhập tên và ngày sinh!");
+        // 1. Kiểm tra các trường bắt buộc
+        if (tfHoTen.getText().isEmpty() || tfCCCD.getText().isEmpty()) {
+            showAlert("Lỗi", "Vui lòng nhập Họ tên và số CCCD/CMND!");
             return;
         }
 
-        // 2. Lấy dữ liệu
-        String hoTen = tfHoTen.getText();
-        String cccd = tfCCCD.getText();
-        LocalDate ngaySinh = dpNgaySinh.getValue();
-        String gioiTinh = cbGioiTinh.getValue();
-        String queQuan = tfQueQuan.getText();
-        String ngheNghiep = tfNgheNghiep.getText();
-        String maHo = tfMaHoKhau.getText(); // Có thể rỗng
+        if (dpNgaySinh.getValue() == null) {
+            showAlert("Lỗi", "Vui lòng chọn Ngày sinh!");
+            return;
+        }
 
-        // 3. Kết nối SQL và Lưu
-        String sql = "INSERT INTO nhankhau (HoTen, SoCMND_CCCD, NgaySinh, GioiTinh, QueQuan, NgheNghiep, MaHoKhau) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try {
+            // Lấy dữ liệu từ giao diện
+            String hoTen = tfHoTen.getText();
+            String cccd = tfCCCD.getText();
+            LocalDate ngaySinhLocal = dpNgaySinh.getValue();
+            String gioiTinh = cbGioiTinh.getValue();
+            String sdt = tfSDT.getText();
+            String quanHe = tfQuanHe.getText();
+            String queQuan = tfQueQuan.getText();
+            String ngheNghiep = tfNgheNghiep.getText();
+            String maHo = tfMaHoKhau.getText();
+            String ghiChu = taGhiChu.getText();
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            // 2. Câu lệnh SQL mới (Bỏ TamTru, TamVang - Thêm SoDT, QuanHe, GhiChu)
+            String sql = "INSERT INTO nhankhau (SoCMND_CCCD, MaHoKhau, HoTen, NgaySinh, GioiTinh, " +
+                    "QueQuan, NgheNghiep, SoDT, QuanHe, GhiChu) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-            stmt.setString(1, hoTen);
-            stmt.setString(2, cccd);
-            stmt.setDate(3, java.sql.Date.valueOf(ngaySinh));
-            stmt.setString(4, gioiTinh);
-            stmt.setString(5, queQuan);
-            stmt.setString(6, ngheNghiep);
+            try (Connection conn = DatabaseConnection.getConnection();
+                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            if (maHo.isEmpty()) {
-                stmt.setNull(7, java.sql.Types.VARCHAR);
-            } else {
-                stmt.setString(7, maHo);
-            }
+                stmt.setString(1, cccd);
 
-            int rows = stmt.executeUpdate();
-            if (rows > 0) {
-                showAlert("Thành công", "Đã thêm nhân khẩu mới!");
-                closeWindow(); // Đóng cửa sổ sau khi lưu xong
+                // Xử lý Mã hộ khẩu (nếu để trống thì là NULL)
+                if (maHo == null || maHo.trim().isEmpty()) {
+                    stmt.setNull(2, java.sql.Types.VARCHAR);
+                } else {
+                    stmt.setString(2, maHo);
+                }
+
+                stmt.setString(3, hoTen);
+                stmt.setDate(4, java.sql.Date.valueOf(ngaySinhLocal));
+                stmt.setString(5, gioiTinh);
+                stmt.setString(6, queQuan);
+                stmt.setString(7, ngheNghiep);
+                stmt.setString(8, sdt);      // Cột SoDT
+                stmt.setString(9, quanHe);   // Cột QuanHe
+                stmt.setString(10, ghiChu);  // Cột GhiChu
+
+                int rows = stmt.executeUpdate();
+                if (rows > 0) {
+                    showAlert("Thành công", "Đã thêm nhân khẩu mới!");
+                    closeWindow();
+                }
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Lỗi SQL", "Không thể lưu: " + e.getMessage());
+            showAlert("Lỗi SQL", "Không thể lưu dữ liệu (Có thể trùng số CCCD): \n" + e.getMessage());
         }
     }
 

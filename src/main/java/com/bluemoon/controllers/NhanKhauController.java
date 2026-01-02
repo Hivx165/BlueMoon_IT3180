@@ -1,7 +1,7 @@
 package com.bluemoon.controllers;
 
-import com.bluemoon.models.NhanKhauModel;
 import com.bluemoon.services.DatabaseConnection;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -22,61 +22,70 @@ import java.util.Optional;
 
 public class NhanKhauController {
 
-    @FXML
-    private TableView<NhanKhauModel> nhanKhauTable;
+    @FXML private TableView<NhanKhauDisplay> nhanKhauTable;
+    @FXML private TableColumn<NhanKhauDisplay, String> colMaHo;
+    @FXML private TableColumn<NhanKhauDisplay, String> colHoTen;
+    @FXML private TableColumn<NhanKhauDisplay, String> colNgaySinh;
+    @FXML private TableColumn<NhanKhauDisplay, String> colGioiTinh;
+    @FXML private TableColumn<NhanKhauDisplay, String> colCCCD;
+    @FXML private TableColumn<NhanKhauDisplay, String> colSDT;
+    @FXML private TableColumn<NhanKhauDisplay, String> colQuanHe;
+    @FXML private TableColumn<NhanKhauDisplay, String> colTrangThai;
+    @FXML private TableColumn<NhanKhauDisplay, String> colGhiChu;
 
-    // Các cột tương ứng với Model
-    @FXML private TableColumn<NhanKhauModel, String> colCCCD;
-    @FXML private TableColumn<NhanKhauModel, String> colHoTen;
-    @FXML private TableColumn<NhanKhauModel, Integer> colTuoi;
-    @FXML private TableColumn<NhanKhauModel, String> colGioiTinh;
-    @FXML private TableColumn<NhanKhauModel, String> colSDT;
-    @FXML private TableColumn<NhanKhauModel, String> colMaHoKhau;
-    @FXML private TableColumn<NhanKhauModel, String> colQuanHe;
+    @FXML private TextField searchField;
 
-    @FXML
-    private TextField searchField;
-
-    private ObservableList<NhanKhauModel> nhanKhauList = FXCollections.observableArrayList();
+    private ObservableList<NhanKhauDisplay> listNhanKhau = FXCollections.observableArrayList();
 
     public void initialize() {
-        // 1. Cấu hình cột (Phải trùng tên biến trong NhanKhauModel)
-        colCCCD.setCellValueFactory(new PropertyValueFactory<>("soCMND_CCCD"));
+        // Cấu hình cột bảng
+        colMaHo.setCellValueFactory(new PropertyValueFactory<>("maHo"));
         colHoTen.setCellValueFactory(new PropertyValueFactory<>("hoTen"));
-        colTuoi.setCellValueFactory(new PropertyValueFactory<>("tuoi"));
+        colNgaySinh.setCellValueFactory(new PropertyValueFactory<>("ngaySinh"));
         colGioiTinh.setCellValueFactory(new PropertyValueFactory<>("gioiTinh"));
-        colSDT.setCellValueFactory(new PropertyValueFactory<>("soDT"));
-        colMaHoKhau.setCellValueFactory(new PropertyValueFactory<>("maHoKhau"));
+        colCCCD.setCellValueFactory(new PropertyValueFactory<>("cccd"));
+        colSDT.setCellValueFactory(new PropertyValueFactory<>("sdt"));
         colQuanHe.setCellValueFactory(new PropertyValueFactory<>("quanHe"));
+        colTrangThai.setCellValueFactory(new PropertyValueFactory<>("trangThai"));
+        colGhiChu.setCellValueFactory(new PropertyValueFactory<>("ghiChu"));
 
-        // 2. Load dữ liệu ban đầu
-        loadDataFromDB();
+        loadData();
     }
 
     // --- TẢI DỮ LIỆU TỪ SQL ---
-    private void loadDataFromDB() {
-        nhanKhauList.clear();
-        try (Connection conn = DatabaseConnection.getConnection();
-             Statement stmt = conn.createStatement()) {
+    private void loadData() {
+        listNhanKhau.clear();
+        String sql = "SELECT * FROM nhankhau";
 
-            String sql = "SELECT * FROM nhankhau";
-            ResultSet rs = stmt.executeQuery(sql);
+        try (Connection conn = DatabaseConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                NhanKhauModel nk = new NhanKhauModel(
-                        rs.getString("SoCMND_CCCD"),
+                // Xử lý logic Trạng thái cư trú
+                int tamTru = rs.getInt("TamTru");
+                int tamVang = rs.getInt("TamVang");
+                String trangThai = "Thường trú";
+
+                if (tamVang == 1) {
+                    trangThai = "Tạm vắng";
+                } else if (tamTru == 1) {
+                    trangThai = "Tạm trú";
+                }
+
+                listNhanKhau.add(new NhanKhauDisplay(
                         rs.getString("MaHoKhau"),
                         rs.getString("HoTen"),
-                        rs.getInt("Tuoi"), // Lưu ý: Nếu cột SQL là DateOfBirth thì cần tính tuổi
+                        rs.getDate("NgaySinh").toString(), // Chuyển Date sang String
                         rs.getString("GioiTinh"),
+                        rs.getString("SoCMND_CCCD"),
                         rs.getString("SoDT"),
                         rs.getString("QuanHe"),
-                        rs.getInt("TamTru"),
-                        rs.getInt("TamVang")
-                );
-                nhanKhauList.add(nk);
+                        trangThai,
+                        rs.getString("GhiChu")
+                ));
             }
-            nhanKhauTable.setItems(nhanKhauList);
+            nhanKhauTable.setItems(listNhanKhau);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -87,25 +96,26 @@ public class NhanKhauController {
     // --- TÌM KIẾM ---
     @FXML
     private void handleSearch() {
-        String keyword = searchField.getText().toLowerCase();
-        ObservableList<NhanKhauModel> filteredList = FXCollections.observableArrayList();
+        String key = searchField.getText().toLowerCase();
+        ObservableList<NhanKhauDisplay> filter = FXCollections.observableArrayList();
 
-        for (NhanKhauModel nk : nhanKhauList) {
-            if (nk.getHoTen().toLowerCase().contains(keyword) ||
-                    nk.getSoCMND_CCCD().toLowerCase().contains(keyword)) {
-                filteredList.add(nk);
+        for (NhanKhauDisplay nk : listNhanKhau) {
+            if (nk.getHoTen().toLowerCase().contains(key) ||
+                    nk.getCccd().toLowerCase().contains(key) ||
+                    (nk.getSdt() != null && nk.getSdt().contains(key))) {
+                filter.add(nk);
             }
         }
-        nhanKhauTable.setItems(filteredList);
+        nhanKhauTable.setItems(filter);
     }
 
     @FXML
     private void handleRefresh() {
-        loadDataFromDB();
+        loadData();
         searchField.clear();
     }
 
-    // --- THÊM MỚI (Mở Form ThemNhanKhau.fxml) ---
+    // --- THÊM NHÂN KHẨU (Mở form ThemNhanKhau.fxml) ---
     @FXML
     private void handleAdd() {
         try {
@@ -115,41 +125,38 @@ public class NhanKhauController {
             Stage stage = new Stage();
             stage.setTitle("Thêm Nhân Khẩu Mới");
             stage.setScene(new Scene(root));
-
-            // WINDOW_MODAL: Bắt buộc người dùng xử lý cửa sổ này trước khi quay lại màn hình chính
             stage.initModality(Modality.WINDOW_MODAL);
-            stage.initOwner(nhanKhauTable.getScene().getWindow());
 
-            stage.showAndWait(); // Chờ đến khi cửa sổ đóng lại
+            if (nhanKhauTable.getScene() != null) {
+                stage.initOwner(nhanKhauTable.getScene().getWindow());
+            }
 
-            // Sau khi đóng form, tải lại dữ liệu để cập nhật người vừa thêm
-            handleRefresh();
+            stage.showAndWait();
+            handleRefresh(); // Tải lại sau khi thêm
 
         } catch (IOException e) {
             e.printStackTrace();
-            showAlert("Lỗi", "Không thể mở form thêm mới: " + e.getMessage());
+            showAlert("Lỗi", "Không thể mở form thêm: " + e.getMessage());
         }
     }
 
     // --- XÓA NHÂN KHẨU ---
     @FXML
     private void handleDelete() {
-        NhanKhauModel selectedItem = nhanKhauTable.getSelectionModel().getSelectedItem();
-
-        if (selectedItem == null) {
+        NhanKhauDisplay selected = nhanKhauTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
             showAlert("Cảnh báo", "Vui lòng chọn nhân khẩu cần xóa!");
             return;
         }
 
-        // Hiện hộp thoại xác nhận
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Xác nhận xóa");
         alert.setHeaderText(null);
-        alert.setContentText("Bạn có chắc chắn muốn xóa: " + selectedItem.getHoTen() + " ?");
+        alert.setContentText("Bạn có chắc muốn xóa: " + selected.getHoTen() + " (" + selected.getCccd() + ")?");
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            deleteNhanKhau(selectedItem.getSoCMND_CCCD());
+            deleteNhanKhau(selected.getCccd());
         }
     }
 
@@ -162,24 +169,57 @@ public class NhanKhauController {
             int rows = stmt.executeUpdate();
 
             if (rows > 0) {
-                showAlert("Thành công", "Đã xóa thành công!");
-                handleRefresh(); // Tải lại bảng
+                showAlert("Thành công", "Đã xóa nhân khẩu thành công!");
+                handleRefresh();
             } else {
                 showAlert("Lỗi", "Không tìm thấy dữ liệu để xóa.");
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Lỗi SQL", "Không thể xóa: " + e.getMessage());
         }
     }
 
-    // --- HÀM TIỆN ÍCH ---
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    // --- LỚP NỘI BỘ ĐỂ HIỂN THỊ DỮ LIỆU (DTO) ---
+    public static class NhanKhauDisplay {
+        private final SimpleStringProperty maHo;
+        private final SimpleStringProperty hoTen;
+        private final SimpleStringProperty ngaySinh;
+        private final SimpleStringProperty gioiTinh;
+        private final SimpleStringProperty cccd;
+        private final SimpleStringProperty sdt;
+        private final SimpleStringProperty quanHe;
+        private final SimpleStringProperty trangThai; // Hiển thị: Tạm trú/Tạm vắng/Thường trú
+        private final SimpleStringProperty ghiChu;
+
+        public NhanKhauDisplay(String ma, String ten, String ngay, String gt, String cmnd, String dt, String qh, String tt, String gc) {
+            this.maHo = new SimpleStringProperty(ma);
+            this.hoTen = new SimpleStringProperty(ten);
+            this.ngaySinh = new SimpleStringProperty(ngay);
+            this.gioiTinh = new SimpleStringProperty(gt);
+            this.cccd = new SimpleStringProperty(cmnd);
+            this.sdt = new SimpleStringProperty(dt);
+            this.quanHe = new SimpleStringProperty(qh);
+            this.trangThai = new SimpleStringProperty(tt);
+            this.ghiChu = new SimpleStringProperty(gc);
+        }
+
+        public String getMaHo() { return maHo.get(); }
+        public String getHoTen() { return hoTen.get(); }
+        public String getNgaySinh() { return ngaySinh.get(); }
+        public String getGioiTinh() { return gioiTinh.get(); }
+        public String getCccd() { return cccd.get(); }
+        public String getSdt() { return sdt.get(); }
+        public String getQuanHe() { return quanHe.get(); }
+        public String getTrangThai() { return trangThai.get(); }
+        public String getGhiChu() { return ghiChu.get(); }
     }
 }

@@ -7,9 +7,15 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -28,22 +34,24 @@ public class PhiQuanLyController {
     private ObservableList<PhiQuanLyDisplay> list = FXCollections.observableArrayList();
 
     public void initialize() {
-        // Cấu hình cột
+        // 1. Cấu hình cột (Phải trùng tên biến trong Class nội bộ bên dưới)
         colMaHo.setCellValueFactory(new PropertyValueFactory<>("maHo"));
         colDienTich.setCellValueFactory(new PropertyValueFactory<>("dienTich"));
         colDonGia.setCellValueFactory(new PropertyValueFactory<>("donGia"));
         colTongTien.setCellValueFactory(new PropertyValueFactory<>("tongTien"));
         colNam.setCellValueFactory(new PropertyValueFactory<>("nam"));
 
+        // 2. Tải dữ liệu ban đầu
         loadData();
     }
 
+    // --- TẢI DỮ LIỆU TỪ SQL ---
     private void loadData() {
         list.clear();
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement()) {
 
-            // JOIN bảng phiquanly và hokhau
+            // JOIN bảng phiquanly và hokhau để lấy diện tích
             String sql = "SELECT pql.MaHoKhau, hk.DienTichHo, pql.GiaPhi, pql.TienNopMoiThang, pql.Nam " +
                     "FROM phiquanly pql " +
                     "JOIN hokhau hk ON pql.MaHoKhau = hk.MaHoKhau";
@@ -62,9 +70,11 @@ public class PhiQuanLyController {
 
         } catch (Exception e) {
             e.printStackTrace();
+            showAlert("Lỗi", "Không thể tải dữ liệu: " + e.getMessage());
         }
     }
 
+    // --- XỬ LÝ TÌM KIẾM ---
     @FXML
     private void handleSearch() {
         String key = searchField.getText().toLowerCase();
@@ -77,17 +87,50 @@ public class PhiQuanLyController {
         tablePhiQuanLy.setItems(filter);
     }
 
-    @FXML private void handleRefresh() { loadData(); }
+    @FXML
+    private void handleRefresh() {
+        loadData();
+        searchField.clear();
+    }
 
-    @FXML private void handleAdd() {
+    // --- XỬ LÝ THÊM MỚI (Mở form ThemPhiQuanLy.fxml) ---
+    @FXML
+    private void handleAdd() {
+        try {
+            // Load giao diện thiết lập phí quản lý
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bluemoon/views/ThemPhiQuanLy.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Thiết lập Phí Quản Lý");
+            stage.setScene(new Scene(root));
+
+            // Chặn cửa sổ chính (Modal)
+            stage.initModality(Modality.WINDOW_MODAL);
+            if (tablePhiQuanLy.getScene() != null) {
+                stage.initOwner(tablePhiQuanLy.getScene().getWindow());
+            }
+
+            stage.showAndWait(); // Chờ nhập xong
+
+            // Sau khi đóng form, tải lại bảng
+            handleRefresh();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Lỗi", "Không thể mở form thêm mới: " + e.getMessage());
+        }
+    }
+
+    private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Thông báo");
+        alert.setTitle(title);
         alert.setHeaderText(null);
-        alert.setContentText("Tính năng tạo phí quản lý tự động sẽ được cập nhật sau.");
+        alert.setContentText(content);
         alert.showAndWait();
     }
 
-    // Class nội bộ để hiển thị
+    // --- CLASS NỘI BỘ (MODEL HIỂN THỊ) ---
     public static class PhiQuanLyDisplay {
         private final SimpleStringProperty maHo;
         private final SimpleFloatProperty dienTich;

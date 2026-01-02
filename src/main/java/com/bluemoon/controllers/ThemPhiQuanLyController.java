@@ -10,7 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDate;
 
-public class ThemPhiDichVuController {
+public class ThemPhiQuanLyController {
 
     @FXML private TextField tfMaHoKhau;
     @FXML private TextField tfDienTich;
@@ -22,7 +22,6 @@ public class ThemPhiDichVuController {
     private float dienTichHienTai = 0;
 
     public void initialize() {
-        // Mặc định năm hiện tại
         tfNam.setText(String.valueOf(LocalDate.now().getYear()));
 
         // Tự động tính tiền khi nhập đơn giá
@@ -31,7 +30,7 @@ public class ThemPhiDichVuController {
         });
     }
 
-    // 1. Kiểm tra Mã hộ và lấy Diện tích
+    // 1. Kiểm tra Mã hộ để lấy Diện tích
     @FXML
     private void handleCheck() {
         String maHo = tfMaHoKhau.getText();
@@ -47,7 +46,7 @@ public class ThemPhiDichVuController {
             if (rs.next()) {
                 dienTichHienTai = rs.getFloat("DienTichHo");
                 tfDienTich.setText(String.valueOf(dienTichHienTai));
-                calculateTotal(); // Tính lại tiền nếu đã nhập giá
+                calculateTotal();
             } else {
                 showAlert("Lỗi", "Không tìm thấy Mã hộ khẩu: " + maHo);
                 tfDienTich.setText("");
@@ -67,11 +66,11 @@ public class ThemPhiDichVuController {
                 lblThanhTien.setText(String.format("%,.0f VND", thanhTien));
             }
         } catch (NumberFormatException e) {
-            // Bỏ qua nếu nhập chữ
+            // Ignore
         }
     }
 
-    // 2. Lưu dữ liệu
+    // 2. Lưu vào bảng phiquanly
     @FXML
     private void handleSave() {
         if (tfMaHoKhau.getText().isEmpty() || tfDonGia.getText().isEmpty() || tfDienTich.getText().isEmpty()) {
@@ -85,12 +84,10 @@ public class ThemPhiDichVuController {
             int nam = Integer.parseInt(tfNam.getText());
             float thanhTien = dienTichHienTai * donGia;
 
-            // Kiểm tra xem hộ này đã có phí dịch vụ năm này chưa
+            // Kiểm tra tồn tại
             if (checkExist(maHo, nam)) {
-                // Nếu có rồi thì Update (Cập nhật)
                 updatePhi(maHo, donGia, thanhTien, nam);
             } else {
-                // Nếu chưa thì Insert (Thêm mới)
                 insertPhi(maHo, donGia, thanhTien, nam);
             }
 
@@ -105,7 +102,7 @@ public class ThemPhiDichVuController {
     }
 
     private boolean checkExist(String maHo, int nam) throws Exception {
-        String sql = "SELECT COUNT(*) FROM phidichvu WHERE MaHoKhau = ? AND Nam = ?";
+        String sql = "SELECT COUNT(*) FROM phiquanly WHERE MaHoKhau = ? AND Nam = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, maHo);
@@ -117,7 +114,7 @@ public class ThemPhiDichVuController {
     }
 
     private void insertPhi(String maHo, float gia, float tien, int nam) throws Exception {
-        String sql = "INSERT INTO phidichvu (MaHoKhau, GiaPhi, TienNopMoiThang, Nam) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO phiquanly (MaHoKhau, GiaPhi, TienNopMoiThang, Nam) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, maHo);
@@ -125,12 +122,12 @@ public class ThemPhiDichVuController {
             stmt.setFloat(3, tien);
             stmt.setInt(4, nam);
             stmt.executeUpdate();
-            showAlert("Thành công", "Đã thêm mới phí dịch vụ!");
+            showAlert("Thành công", "Đã thêm mới phí quản lý!");
         }
     }
 
     private void updatePhi(String maHo, float gia, float tien, int nam) throws Exception {
-        String sql = "UPDATE phidichvu SET GiaPhi = ?, TienNopMoiThang = ? WHERE MaHoKhau = ? AND Nam = ?";
+        String sql = "UPDATE phiquanly SET GiaPhi = ?, TienNopMoiThang = ? WHERE MaHoKhau = ? AND Nam = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setFloat(1, gia);
@@ -138,7 +135,7 @@ public class ThemPhiDichVuController {
             stmt.setString(3, maHo);
             stmt.setInt(4, nam);
             stmt.executeUpdate();
-            showAlert("Thành công", "Đã cập nhật phí dịch vụ!");
+            showAlert("Thành công", "Đã cập nhật phí quản lý!");
         }
     }
 

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
@@ -11,61 +10,45 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bluemoon.controllers.NhanKhauController">
+<AnchorPane prefHeight="600.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bluemoon.controllers.NhanKhauController">
     <children>
-        <VBox layoutX="20.0" layoutY="20.0" prefHeight="560.0" prefWidth="860.0" spacing="10.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+        <VBox layoutX="20.0" layoutY="20.0" spacing="15.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
             <children>
                 <Label text="QUẢN LÝ NHÂN KHẨU" textFill="#2c3e50">
-                    <font>
-                        <Font name="System Bold" size="24.0" />
-                    </font>
+                    <font><Font name="System Bold" size="24.0" /></font>
                 </Label>
 
-                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                <HBox alignment="CENTER_LEFT" spacing="15.0">
                     <children>
-                        <Label text="Tìm kiếm:">
-                            <font>
-                                <Font size="14.0" />
-                            </font>
-                        </Label>
-                        <TextField fx:id="searchField" prefHeight="30.0" prefWidth="300.0" promptText="Nhập tên hoặc CCCD..." />
+                        <Label text="Tìm kiếm:" />
+                        <TextField fx:id="searchField" prefWidth="300.0" promptText="Nhập tên, CCCD hoặc SĐT..." />
                         <Button mnemonicParsing="false" onAction="#handleSearch" style="-fx-background-color: #3498db;" text="Tìm" textFill="WHITE" />
-                        <Button mnemonicParsing="false" onAction="#handleRefresh" style="-fx-background-color: #2ecc71;" text="Làm mới" textFill="WHITE" />
+                        <Button mnemonicParsing="false" onAction="#handleRefresh" style="-fx-background-color: #f39c12;" text="Làm mới" textFill="WHITE" />
+
+                        <Label maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+
+                        <Button mnemonicParsing="false" onAction="#handleAdd" style="-fx-background-color: #2ecc71;" text="+ Thêm Nhân Khẩu" textFill="WHITE">
+                            <font><Font name="System Bold" size="13.0" /></font>
+                        </Button>
+                        <Button mnemonicParsing="false" onAction="#handleDelete" style="-fx-background-color: #e74c3c;" text="Xóa" textFill="WHITE">
+                            <font><Font name="System Bold" size="13.0" /></font>
+                        </Button>
                     </children>
-                    <VBox.margin>
-                        <Insets bottom="10.0" top="10.0" />
-                    </VBox.margin>
                 </HBox>
 
-                <TableView fx:id="nhanKhauTable" prefHeight="400.0" prefWidth="860.0" VBox.vgrow="ALWAYS">
+                <TableView fx:id="nhanKhauTable" VBox.vgrow="ALWAYS">
                     <columns>
-                        <TableColumn fx:id="colCCCD" prefWidth="120.0" text="Số CCCD" />
+                        <TableColumn fx:id="colMaHo" prefWidth="80.0" text="Mã Hộ" />
                         <TableColumn fx:id="colHoTen" prefWidth="180.0" text="Họ và Tên" />
-                        <TableColumn fx:id="colTuoi" prefWidth="60.0" text="Tuổi" />
-                        <TableColumn fx:id="colGioiTinh" prefWidth="80.0" text="Giới tính" />
-                        <TableColumn fx:id="colSDT" prefWidth="120.0" text="Số ĐT" />
-                        <TableColumn fx:id="colMaHoKhau" prefWidth="100.0" text="Mã Hộ" />
-                        <TableColumn fx:id="colQuanHe" prefWidth="120.0" text="Quan hệ chủ hộ" />
+                        <TableColumn fx:id="colNgaySinh" prefWidth="100.0" text="Ngày Sinh" />
+                        <TableColumn fx:id="colGioiTinh" prefWidth="70.0" text="Giới Tính" />
+                        <TableColumn fx:id="colCCCD" prefWidth="120.0" text="CCCD/CMND" />
+                        <TableColumn fx:id="colSDT" prefWidth="100.0" text="SĐT" />
+                        <TableColumn fx:id="colQuanHe" prefWidth="80.0" text="Quan Hệ" />
+                        <TableColumn fx:id="colTrangThai" prefWidth="100.0" text="Trạng Thái" />
+                        <TableColumn fx:id="colGhiChu" prefWidth="100.0" text="Ghi Chú" />
                     </columns>
                 </TableView>
-
-                <HBox alignment="CENTER_RIGHT" spacing="15.0">
-                    <children>
-                        <Button mnemonicParsing="false" onAction="#handleAdd" prefHeight="35.0" prefWidth="120.0" style="-fx-background-color: #2ecc71;" text="Thêm mới (+)" textFill="WHITE">
-                            <font>
-                                <Font name="System Bold" size="13.0" />
-                            </font>
-                        </Button>
-                        <Button mnemonicParsing="false" onAction="#handleDelete" prefHeight="35.0" prefWidth="100.0" style="-fx-background-color: #e74c3c;" text="Xóa" textFill="WHITE">
-                            <font>
-                                <Font name="System Bold" size="13.0" />
-                            </font>
-                        </Button>
-                    </children>
-                    <padding>
-                        <Insets top="10.0" />
-                    </padding>
-                </HBox>
             </children>
         </VBox>
     </children>

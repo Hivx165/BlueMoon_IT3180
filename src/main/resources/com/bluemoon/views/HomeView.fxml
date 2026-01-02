@@ -8,19 +8,19 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="mainBorderPane" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bluemoon.controllers.HomeController">
+<BorderPane fx:id="mainBorderPane" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bluemoon.controllers.HomeController">
 
     <left>
-        <VBox prefHeight="600.0" prefWidth="230.0" style="-fx-background-color: #2c3e50;" BorderPane.alignment="CENTER">
+        <VBox prefHeight="600.0" prefWidth="240.0" style="-fx-background-color: #2c3e50;" BorderPane.alignment="CENTER">
             <children>
-                <VBox alignment="CENTER" prefHeight="100.0" prefWidth="230.0" style="-fx-background-color: #2980b9;">
+                <VBox alignment="CENTER" prefHeight="100.0" prefWidth="240.0" style="-fx-background-color: #2980b9;">
                     <children>
                         <Label text="BLUE MOON" textFill="WHITE">
                             <font>
-                                <Font name="System Bold" size="24.0" />
+                                <Font name="System Bold" size="26.0" />
                             </font>
                         </Label>
-                        <Label text="Apartment Manager" textFill="#ecf0f1">
+                        <Label text="Apartment Manager" textFill="#bdc3c7">
                             <font>
                                 <Font size="14.0" />
                             </font>
@@ -28,84 +28,60 @@
                     </children>
                 </VBox>
 
-                <Button mnemonicParsing="false" onAction="#handleTrangChu" prefHeight="50.0" prefWidth="230.0" style="-fx-background-color: transparent; -fx-alignment: CENTER_LEFT; -fx-cursor: hand;" text="🏠  Trang chủ" textFill="WHITE">
-                    <padding>
-                        <Insets left="30.0" />
-                    </padding>
-                    <font>
-                        <Font name="System Bold" size="14.0" />
-                    </font>
+                <Button mnemonicParsing="false" onAction="#handleTrangChu" prefHeight="50.0" prefWidth="240.0" style="-fx-background-color: transparent; -fx-alignment: CENTER_LEFT; -fx-cursor: hand;" text="🏠  Trang chủ" textFill="WHITE">
+                    <padding><Insets left="30.0" /></padding>
+                    <font><Font name="System Bold" size="14.0" /></font>
                 </Button>
 
                 <Label text="QUẢN LÝ DÂN CƯ" textFill="#95a5a6">
-                    <font>
-                        <Font name="System Bold" size="12.0" />
-                    </font>
-                    <VBox.margin>
-                        <Insets left="20.0" top="15.0" />
-                    </VBox.margin>
+                    <font><Font name="System Bold" size="12.0" /></font>
+                    <VBox.margin><Insets left="20.0" top="15.0" bottom="5.0" /></VBox.margin>
                 </Label>
 
-                <Button mnemonicParsing="false" onAction="#handleNhanKhau" prefHeight="45.0" prefWidth="230.0" style="-fx-background-color: transparent; -fx-alignment: CENTER_LEFT; -fx-cursor: hand;" text="👥  Nhân khẩu" textFill="WHITE">
-                    <padding>
-                        <Insets left="40.0" />
-                    </padding>
-                    <font>
-                        <Font size="14.0" />
-                    </font>
+                <Button mnemonicParsing="false" onAction="#handleNhanKhau" prefHeight="45.0" prefWidth="240.0" style="-fx-background-color: transparent; -fx-alignment: CENTER_LEFT; -fx-cursor: hand;" text="👥  Nhân khẩu" textFill="WHITE">
+                    <padding><Insets left="40.0" /></padding>
+                    <font><Font size="14.0" /></font>
                 </Button>
 
-                <Button mnemonicParsing="false" onAction="#handleHoKhau" prefHeight="45.0" prefWidth="230.0" style="-fx-background-color: transparent; -fx-alignment: CENTER_LEFT; -fx-cursor: hand;" text="📋  Hộ khẩu" textFill="WHITE">
-                    <padding>
-                        <Insets left="40.0" />
-                    </padding>
-                    <font>
-                        <Font size="14.0" />
-                    </font>
+                <Button mnemonicParsing="false" onAction="#handleHoKhau" prefHeight="45.0" prefWidth="240.0" style="-fx-background-color: transparent; -fx-alignment: CENTER_LEFT; -fx-cursor: hand;" text="📋  Hộ khẩu" textFill="WHITE">
+                    <padding><Insets left="40.0" /></padding>
+                    <font><Font size="14.0" /></font>
                 </Button>
 
                 <Label text="QUẢN LÝ KHOẢN THU" textFill="#95a5a6">
-                    <font>
-                        <Font name="System Bold" size="12.0" />
-                    </font>
-                    <VBox.margin>
-                        <Insets left="20.0" top="15.0" />
-                    </VBox.margin>
+                    <font><Font name="System Bold" size="12.0" /></font>
+                    <VBox.margin><Insets left="20.0" top="15.0" bottom="5.0" /></VBox.margin>
                 </Label>
 
-                <Button mnemonicParsing="false" onAction="#handleThuPhi" prefHeight="45.0" prefWidth="230.0" style="-fx-background-color: transparent; -fx-alignment: CENTER_LEFT; -fx-cursor: hand;" text="💰  Phí Dịch Vụ" textFill="WHITE">
-                    <padding>
-                        <Insets left="40.0" />
-                    </padding>
-                    <font>
-                        <Font size="14.0" />
-                    </font>
+                <Button mnemonicParsing="false" onAction="#handleThuPhi" prefHeight="45.0" prefWidth="240.0" style="-fx-background-color: transparent; -fx-alignment: CENTER_LEFT; -fx-cursor: hand;" text="💰  Phí Dịch Vụ" textFill="WHITE">
+                    <padding><Insets left="40.0" /></padding>
+                    <font><Font size="14.0" /></font>
                 </Button>
 
-                <Button mnemonicParsing="false" onAction="#handlePhiQuanLy" prefHeight="45.0" prefWidth="230.0" style="-fx-background-color: transparent; -fx-alignment: CENTER_LEFT; -fx-cursor: hand;" text="🏢  Phí Quản Lý" textFill="WHITE">
-                    <padding>
-                        <Insets left="40.0" />
-                    </padding>
-                    <font>
-                        <Font size="14.0" />
-                    </font>
+                <Button mnemonicParsing="false" onAction="#handlePhiQuanLy" prefHeight="45.0" prefWidth="240.0" style="-fx-background-color: transparent; -fx-alignment: CENTER_LEFT; -fx-cursor: hand;" text="🏢  Phí Quản Lý" textFill="WHITE">
+                    <padding><Insets left="40.0" /></padding>
+                    <font><Font size="14.0" /></font>
                 </Button>
 
-                <Button mnemonicParsing="false" onAction="#handlePhiDongGop" prefHeight="45.0" prefWidth="230.0" style="-fx-background-color: transparent; -fx-alignment: CENTER_LEFT; -fx-cursor: hand;" text="❤️  Phí Đóng Góp" textFill="WHITE">
-                    <padding>
-                        <Insets left="40.0" />
-                    </padding>
-                    <font>
-                        <Font size="14.0" />
-                    </font>
+                <Button mnemonicParsing="false" onAction="#handlePhiDongGop" prefHeight="45.0" prefWidth="240.0" style="-fx-background-color: transparent; -fx-alignment: CENTER_LEFT; -fx-cursor: hand;" text="❤️  Phí Đóng Góp" textFill="WHITE">
+                    <padding><Insets left="40.0" /></padding>
+                    <font><Font size="14.0" /></font>
+                </Button>
+
+                <Label text="BÁO CÁO &amp; THỐNG KÊ" textFill="#95a5a6">
+                    <font><Font name="System Bold" size="12.0" /></font>
+                    <VBox.margin><Insets left="20.0" top="15.0" bottom="5.0" /></VBox.margin>
+                </Label>
+
+                <Button mnemonicParsing="false" onAction="#handleThongKe" prefHeight="45.0" prefWidth="240.0" style="-fx-background-color: transparent; -fx-alignment: CENTER_LEFT; -fx-cursor: hand;" text="📊  Thống kê Dân cư" textFill="WHITE">
+                    <padding><Insets left="40.0" /></padding>
+                    <font><Font size="14.0" /></font>
                 </Button>
 
                 <VBox alignment="BOTTOM_CENTER" VBox.vgrow="ALWAYS">
                     <children>
-                        <Button mnemonicParsing="false" onAction="#handleLogout" prefHeight="50.0" prefWidth="230.0" style="-fx-background-color: #c0392b; -fx-cursor: hand;" text="Đăng xuất hệ thống" textFill="WHITE">
-                            <font>
-                                <Font name="System Bold" size="14.0" />
-                            </font>
+                        <Button mnemonicParsing="false" onAction="#handleLogout" prefHeight="50.0" prefWidth="240.0" style="-fx-background-color: #c0392b; -fx-cursor: hand;" text="Đăng xuất hệ thống" textFill="WHITE">
+                            <font><Font name="System Bold" size="14.0" /></font>
                         </Button>
                     </children>
                 </VBox>
@@ -131,50 +107,47 @@
 
                 <VBox spacing="20.0">
                     <padding>
-                        <Insets left="30.0" right="30.0" top="30.0" />
+                        <Insets left="40.0" right="40.0" top="40.0" />
                     </padding>
                     <children>
-                        <Label text="Thống kê tổng quan" textFill="#2c3e50">
+                        <Label text="Tổng quan hệ thống" textFill="#2c3e50">
                             <font>
-                                <Font name="System Bold" size="24.0" />
+                                <Font name="System Bold" size="28.0" />
                             </font>
                         </Label>
 
-                        <HBox spacing="30.0">
+                        <HBox spacing="40.0">
                             <children>
-                                <VBox alignment="CENTER" prefHeight="150.0" prefWidth="280.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
+                                <VBox alignment="CENTER" prefHeight="160.0" prefWidth="300.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
                                     <children>
-                                        <Label text="Tổng nhân khẩu" textFill="#7f8c8d">
-                                            <font>
-                                                <Font size="18.0" />
-                                            </font>
+                                        <Label text="TỔNG NHÂN KHẨU" textFill="#7f8c8d">
+                                            <font><Font name="System Bold" size="16.0" /></font>
                                         </Label>
                                         <Label fx:id="nhanKhauCount" text="0" textFill="#2980b9">
-                                            <font>
-                                                <Font name="System Bold" size="48.0" />
-                                            </font>
+                                            <font><Font name="System Bold" size="56.0" /></font>
                                         </Label>
                                         <Label text="người đang sinh sống" textFill="#95a5a6" />
                                     </children>
                                 </VBox>
 
-                                <VBox alignment="CENTER" prefHeight="150.0" prefWidth="280.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
+                                <VBox alignment="CENTER" prefHeight="160.0" prefWidth="300.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
                                     <children>
-                                        <Label text="Tổng hộ khẩu" textFill="#7f8c8d">
-                                            <font>
-                                                <Font size="18.0" />
-                                            </font>
+                                        <Label text="TỔNG SỐ HỘ GIA ĐÌNH" textFill="#7f8c8d">
+                                            <font><Font name="System Bold" size="16.0" /></font>
                                         </Label>
                                         <Label fx:id="hoKhauCount" text="0" textFill="#27ae60">
-                                            <font>
-                                                <Font name="System Bold" size="48.0" />
-                                            </font>
+                                            <font><Font name="System Bold" size="56.0" /></font>
                                         </Label>
-                                        <Label text="hộ gia đình đã đăng ký" textFill="#95a5a6" />
+                                        <Label text="hộ đã đăng ký" textFill="#95a5a6" />
                                     </children>
                                 </VBox>
                             </children>
                         </HBox>
+
+                        <Label text="Chúc bạn một ngày làm việc hiệu quả!" textFill="#7f8c8d">
+                            <font><Font name="System Italic" size="14.0" /></font>
+                            <VBox.margin><Insets top="20.0" /></VBox.margin>
+                        </Label>
                     </children>
                 </VBox>
             </children>

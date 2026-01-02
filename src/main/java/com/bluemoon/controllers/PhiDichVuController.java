@@ -7,9 +7,15 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -28,22 +34,24 @@ public class PhiDichVuController {
     private ObservableList<PhiDichVuDisplay> list = FXCollections.observableArrayList();
 
     public void initialize() {
-        // Cấu hình cột
+        // 1. Cấu hình cột (Phải trùng tên biến trong Class nội bộ bên dưới)
         colMaHo.setCellValueFactory(new PropertyValueFactory<>("maHo"));
         colDienTich.setCellValueFactory(new PropertyValueFactory<>("dienTich"));
         colDonGia.setCellValueFactory(new PropertyValueFactory<>("donGia"));
         colTongTien.setCellValueFactory(new PropertyValueFactory<>("tongTien"));
         colNam.setCellValueFactory(new PropertyValueFactory<>("nam"));
 
+        // 2. Tải dữ liệu ban đầu
         loadData();
     }
 
+    // --- TẢI DỮ LIỆU TỪ SQL ---
     private void loadData() {
         list.clear();
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement()) {
 
-            // JOIN bảng phidichvu và hokhau để lấy diện tích thực tế
+            // JOIN bảng phidichvu và hokhau để lấy diện tích thực tế của hộ đó
             String sql = "SELECT pdv.MaHoKhau, hk.DienTichHo, pdv.GiaPhi, pdv.TienNopMoiThang, pdv.Nam " +
                     "FROM phidichvu pdv " +
                     "JOIN hokhau hk ON pdv.MaHoKhau = hk.MaHoKhau";
@@ -62,9 +70,11 @@ public class PhiDichVuController {
 
         } catch (Exception e) {
             e.printStackTrace();
+            showAlert("Lỗi", "Không thể tải dữ liệu: " + e.getMessage());
         }
     }
 
+    // --- XỬ LÝ TÌM KIẾM ---
     @FXML
     private void handleSearch() {
         String key = searchField.getText().toLowerCase();
@@ -77,17 +87,55 @@ public class PhiDichVuController {
         tablePhiDichVu.setItems(filter);
     }
 
-    @FXML private void handleRefresh() { loadData(); }
-    @FXML private void handleAdd() {
+    @FXML
+    private void handleRefresh() {
+        loadData();
+        searchField.clear();
+    }
+
+    // --- XỬ LÝ THÊM MỚI (Mở form ThemPhiDichVu.fxml) ---
+    @FXML
+    private void handleAdd() {
+        try {
+            // Load giao diện thiết lập phí
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bluemoon/views/ThemPhiDichVu.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Thiết lập Phí Dịch Vụ");
+            stage.setScene(new Scene(root));
+
+            // Chặn cửa sổ chính (Modal)
+            stage.initModality(Modality.WINDOW_MODAL);
+            if (tablePhiDichVu.getScene() != null) {
+                stage.initOwner(tablePhiDichVu.getScene().getWindow());
+            }
+
+            stage.showAndWait(); // Chờ nhập xong
+
+            // Sau khi đóng form, tải lại bảng
+            handleRefresh();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Lỗi", "Không thể mở form thêm mới: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void handleEdit() {
+        showAlert("Thông báo", "Chức năng Cập nhật đang được phát triển.");
+    }
+
+    private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Tính năng");
+        alert.setTitle(title);
         alert.setHeaderText(null);
-        alert.setContentText("Chức năng tự động tạo phí cho năm mới đang phát triển.");
+        alert.setContentText(content);
         alert.showAndWait();
     }
-    @FXML private void handleEdit() { /* Logic cập nhật */ }
 
-    // Class nội bộ để hiển thị
+    // --- CLASS NỘI BỘ (MODEL HIỂN THỊ) ---
     public static class PhiDichVuDisplay {
         private final SimpleStringProperty maHo;
         private final SimpleFloatProperty dienTich;
