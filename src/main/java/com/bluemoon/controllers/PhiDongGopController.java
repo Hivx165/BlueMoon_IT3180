@@ -2,13 +2,20 @@ package com.bluemoon.controllers;
 
 import com.bluemoon.services.DatabaseConnection;
 import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -27,24 +34,25 @@ public class PhiDongGopController {
     private ObservableList<PhiDongGopDisplay> list = FXCollections.observableArrayList();
 
     public void initialize() {
-        // Cấu hình cột
+        // 1. Cấu hình cột (Map với tên getter trong Class nội bộ bên dưới)
         colMaHo.setCellValueFactory(new PropertyValueFactory<>("maHo"));
         colTenKhoanThu.setCellValueFactory(new PropertyValueFactory<>("tenKhoanThu"));
         colSoTien.setCellValueFactory(new PropertyValueFactory<>("soTien"));
         colNgayDong.setCellValueFactory(new PropertyValueFactory<>("ngayDong"));
 
+        // 2. Tải dữ liệu ban đầu
         loadData();
     }
 
+    // --- TẢI DỮ LIỆU TỪ SQL ---
     private void loadData() {
         list.clear();
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement()) {
 
-            // Lưu ý: Nếu tên bảng trong SQL của bạn khác (ví dụ: phidonggop), hãy sửa lại dòng này
             String sql = "SELECT * FROM donggop";
-
             ResultSet rs = stmt.executeQuery(sql);
+
             while (rs.next()) {
                 list.add(new PhiDongGopDisplay(
                         rs.getString("MaHoKhau"),
@@ -57,9 +65,11 @@ public class PhiDongGopController {
 
         } catch (Exception e) {
             e.printStackTrace();
+            showAlert("Lỗi", "Không thể tải dữ liệu: " + e.getMessage());
         }
     }
 
+    // --- XỬ LÝ TÌM KIẾM ---
     @FXML
     private void handleSearch() {
         String key = searchField.getText().toLowerCase();
@@ -73,33 +83,68 @@ public class PhiDongGopController {
         tablePhiDongGop.setItems(filter);
     }
 
-    @FXML private void handleRefresh() { loadData(); }
+    @FXML
+    private void handleRefresh() {
+        loadData();
+        searchField.clear();
+    }
 
-    @FXML private void handleAdd() {
+    // --- XỬ LÝ THÊM MỚI (Mở Form ThemDongGop.fxml) ---
+    @FXML
+    private void handleAdd() {
+        try {
+            // Load giao diện nhập liệu
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/bluemoon/views/ThemDongGop.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Ghi nhận đóng góp");
+            stage.setScene(new Scene(root));
+
+            // Chặn cửa sổ chính (Modal)
+            stage.initModality(Modality.WINDOW_MODAL);
+
+            // Lấy cửa sổ cha để chặn
+            if (tablePhiDongGop.getScene() != null) {
+                stage.initOwner(tablePhiDongGop.getScene().getWindow());
+            }
+
+            stage.showAndWait(); // Chờ đến khi nhập xong và đóng form
+
+            // Sau khi đóng form, tải lại bảng để hiện dữ liệu mới
+            handleRefresh();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Lỗi", "Không thể mở form thêm mới: " + e.getMessage());
+        }
+    }
+
+    private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Thông báo");
+        alert.setTitle(title);
         alert.setHeaderText(null);
-        alert.setContentText("Chức năng thêm phí đóng góp đang phát triển.");
+        alert.setContentText(content);
         alert.showAndWait();
     }
 
-    // Class nội bộ
+    // --- CLASS NỘI BỘ (MODEL HIỂN THỊ) ---
     public static class PhiDongGopDisplay {
         private final SimpleStringProperty maHo;
         private final SimpleStringProperty tenKhoanThu;
         private final SimpleFloatProperty soTien;
-        private final Date ngayDong;
+        private final SimpleObjectProperty<Date> ngayDong;
 
         public PhiDongGopDisplay(String ma, String ten, float tien, Date ngay) {
             this.maHo = new SimpleStringProperty(ma);
             this.tenKhoanThu = new SimpleStringProperty(ten);
             this.soTien = new SimpleFloatProperty(tien);
-            this.ngayDong = ngay;
+            this.ngayDong = new SimpleObjectProperty<>(ngay);
         }
 
         public String getMaHo() { return maHo.get(); }
         public String getTenKhoanThu() { return tenKhoanThu.get(); }
         public float getSoTien() { return soTien.get(); }
-        public Date getNgayDong() { return ngayDong; }
+        public Date getNgayDong() { return ngayDong.get(); }
     }
 }
