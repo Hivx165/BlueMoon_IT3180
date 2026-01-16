@@ -118,6 +118,12 @@ public class HomeController {
     }
 
     @FXML
+    private void handlePhiSinhHoat(ActionEvent event) {
+        System.out.println(">> Click: Phí Sinh Hoạt");
+        switchView("PhiSinhHoat.fxml");
+    }
+
+    @FXML
     private void handleThongKe(ActionEvent event) {
         System.out.println(">> Click: Thống Kê");
         switchView("ThongKeView.fxml");

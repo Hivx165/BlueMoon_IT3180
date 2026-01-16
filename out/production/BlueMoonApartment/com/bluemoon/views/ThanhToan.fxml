@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bluemoon.controllers.ThanhToanController">
+    <VBox fx:id="mainContent" alignment="CENTER" spacing="15" prefHeight="400.0" prefWidth="400.0">
+        <padding><Insets top="20" right="30" bottom="20" left="30"/></padding>
+
+        <Label text="THANH TOÁN ONLINE" textFill="#2980b9">
+            <font><Font name="System Bold" size="20"/></font>
+        </Label>
+
+        <GridPane vgap="10" hgap="10">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="40"/>
+                <ColumnConstraints percentWidth="60"/>
+            </columnConstraints>
+
+            <Label text="Mã hộ khẩu:" GridPane.rowIndex="0" style="-fx-font-weight: bold;"/>
+            <Label fx:id="lblMaHoKhau" text="..." GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <Label text="Tháng / Năm:" GridPane.rowIndex="1" style="-fx-font-weight: bold;"/>
+            <Label fx:id="lblThoiGian" text="..." GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <Label text="Tiền điện:" GridPane.rowIndex="2"/>
+            <Label fx:id="lblDien" text="..." GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+            <Label text="Tiền nước:" GridPane.rowIndex="3"/>
+            <Label fx:id="lblNuoc" text="..." GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+            <Label text="TỔNG THANH TOÁN:" GridPane.rowIndex="4" style="-fx-font-weight: bold; -fx-font-size: 13;"/>
+            <Label fx:id="lblTongTien" text="..." textFill="#c0392b" GridPane.rowIndex="4" GridPane.columnIndex="1">
+                <font><Font name="System Bold" size="18"/></font>
+            </Label>
+        </GridPane>
+
+        <Separator/>
+
+        <VBox spacing="5" alignment="CENTER_LEFT">
+            <Label text="Chọn phương thức thanh toán:"/>
+            <ComboBox fx:id="cbbPhuongThuc" prefWidth="340.0"/>
+            <Label text="* Vui lòng kiểm tra kỹ thông tin trước khi xác nhận." textFill="#7f8c8d">
+                <font><Font name="System Italic" size="11"/></font>
+            </Label>
+        </VBox>
+
+        <HBox spacing="15" alignment="CENTER">
+            <Button fx:id="btnConfirm" text="Xác nhận &amp; Thanh toán" onAction="#handleConfirm" defaultButton="true"
+                    style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-cursor: hand;"/>
+            <Button fx:id="btnCancel" text="Hủy bỏ" onAction="#handleCancel" cancelButton="true"
+                    style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-padding: 10 20; -fx-cursor: hand;"/>
+        </HBox>
+    </VBox>
+
+    <VBox fx:id="loadingBox" visible="false" alignment="CENTER" style="-fx-background-color: rgba(255, 255, 255, 0.9);">
+        <ProgressIndicator prefWidth="50" prefHeight="50"/>
+        <Label text="Đang kết nối cổng thanh toán..." textFill="#2c3e50">
+            <font><Font name="System Bold" size="14"/></font>
+            <VBox.margin><Insets top="10"/></VBox.margin>
+        </Label>
+        <Label text="Vui lòng không tắt cửa sổ này." textFill="#7f8c8d"/>
+    </VBox>
+
+</StackPane>
