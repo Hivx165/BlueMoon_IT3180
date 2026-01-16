@@ -67,10 +67,10 @@
                     <font><Font size="14.0" /></font>
                 </Button>
 
-                <Button mnemonicParsing="false" onAction="#handlePhiQuanLy" prefHeight="45.0" prefWidth="240.0" style="-fx-background-color: transparent; -fx-alignment: CENTER_LEFT; -fx-cursor: hand;" text="🏢  Phí Quản Lý" textFill="WHITE">
-                    <padding><Insets left="40.0" /></padding>
-                    <font><Font size="14.0" /></font>
-                </Button>
+<!--                <Button mnemonicParsing="false" onAction="#handlePhiQuanLy" prefHeight="45.0" prefWidth="240.0" style="-fx-background-color: transparent; -fx-alignment: CENTER_LEFT; -fx-cursor: hand;" text="🏢  Phí Quản Lý" textFill="WHITE">-->
+<!--                    <padding><Insets left="40.0" /></padding>-->
+<!--                    <font><Font size="14.0" /></font>-->
+<!--                </Button>-->
 
                 <Button mnemonicParsing="false" onAction="#handlePhiDongGop" prefHeight="45.0" prefWidth="240.0" style="-fx-background-color: transparent; -fx-alignment: CENTER_LEFT; -fx-cursor: hand;" text="❤️  Phí Đóng Góp" textFill="WHITE">
                     <padding><Insets left="40.0" /></padding>

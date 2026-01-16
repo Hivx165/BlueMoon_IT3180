@@ -36,10 +36,10 @@
             </rowConstraints>
             <children>
                 <Label text="Mã Hộ Khẩu (*):" />
-                <TextField fx:id="tfMaHoKhau" promptText="Ví dụ: HK001" GridPane.columnIndex="1" />
+                <TextField fx:id="tfMaHoKhau" promptText="Ví dụ: HK01" GridPane.columnIndex="1" />
 
-                <Label text="Địa chỉ nhà (*):" GridPane.rowIndex="1" />
-                <TextField fx:id="tfDiaChi" promptText="Số nhà, đường, phường..." GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <Label text="Căn hộ (*):" GridPane.rowIndex="1" />
+                <TextField fx:id="tfDiaChi" promptText="số phòng - tòa ..." GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
                 <Label text="Ngày lập hồ sơ:" GridPane.rowIndex="2" />
                 <DatePicker fx:id="dpNgayLap" prefWidth="300.0" promptText="Chọn ngày" GridPane.columnIndex="1" GridPane.rowIndex="2" />
@@ -49,7 +49,7 @@
             </children>
         </GridPane>
 
-        <Label text="(Lưu ý: Chủ hộ sẽ được cập nhật sau khi thêm Nhân khẩu vào hộ này)" textFill="#7f8c8d" wrapText="true">
+        <Label text="" textFill="#7f8c8d" wrapText="true">
             <font>
                 <Font name="System Italic" size="12.0" />
             </font>
