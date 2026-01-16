@@ -52,11 +52,11 @@
                             </font>
                         </Button>
 
-                        <Button mnemonicParsing="false" onAction="#handleEdit" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #9b59b6;" text="Sửa" textFill="WHITE">
-                            <font>
-                                <Font name="System Bold" size="14.0" />
-                            </font>
-                        </Button>
+<!--                        <Button mnemonicParsing="false" onAction="#handleEdit" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #9b59b6;" text="Sửa" textFill="WHITE">-->
+<!--                            <font>-->
+<!--                                <Font name="System Bold" size="14.0" />-->
+<!--                            </font>-->
+<!--                        </Button>-->
 
                         <Button mnemonicParsing="false" onAction="#handleDelete" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #e74c3c;" text="Xóa" textFill="WHITE">
                             <font>

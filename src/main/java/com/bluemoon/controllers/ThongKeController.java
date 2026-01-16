@@ -1,84 +1,106 @@
 package com.bluemoon.controllers;
 
-import javafx.beans.property.SimpleStringProperty;
+import com.bluemoon.dao.ThongKeDAO;
+import com.bluemoon.models.ThongKeHoKhauModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import com.bluemoon.services.DatabaseConnection;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
+
+import java.text.NumberFormat;
+import java.util.Locale;
+import java.util.Map;
 
 public class ThongKeController {
 
-    @FXML private TableView<SimpleNhanKhau> tableThongKe;
-    @FXML private TableColumn<SimpleNhanKhau, String> colHoTen;
-    @FXML private TableColumn<SimpleNhanKhau, String> colCCCD;
-    @FXML private TableColumn<SimpleNhanKhau, String> colGioiTinh;
-    @FXML private TableColumn<SimpleNhanKhau, String> colDiaChi;
-    @FXML private Label lblTongSo;
+    // Các thành phần của Biểu đồ
+    @FXML private PieChart pieChartNhanKhau;
+    @FXML private BarChart<String, Number> barChartKhoanThu;
+    @FXML private Label lblTongThu;
 
-    private ObservableList<SimpleNhanKhau> list = FXCollections.observableArrayList();
+    // Các thành phần của Bảng chi tiết
+    @FXML private TableView<ThongKeHoKhauModel> tableChiTiet;
+    @FXML private TableColumn<ThongKeHoKhauModel, String> colMaHoKhau;
+    @FXML private TableColumn<ThongKeHoKhauModel, Double> colPhiSinhHoat;
+    @FXML private TableColumn<ThongKeHoKhauModel, Double> colPhiDichVu;
+    @FXML private TableColumn<ThongKeHoKhauModel, Double> colPhiDongGop;
+    @FXML private TableColumn<ThongKeHoKhauModel, Double> colTongCong;
 
+    @FXML
     public void initialize() {
-        // Cấu hình cột
-        colHoTen.setCellValueFactory(new PropertyValueFactory<>("hoTen"));
-        colCCCD.setCellValueFactory(new PropertyValueFactory<>("cccd"));
-        colGioiTinh.setCellValueFactory(new PropertyValueFactory<>("gioiTinh"));
-        colDiaChi.setCellValueFactory(new PropertyValueFactory<>("diaChi"));
+        // Setup Bảng
+        setupTable();
 
-        // Tự động tải dữ liệu khi mở
+        // Load toàn bộ dữ liệu
         loadData();
     }
 
-    @FXML
-    public void loadData() {
-        list.clear();
-        try (Connection conn = DatabaseConnection.getConnection();
-             Statement stmt = conn.createStatement()) {
+    private void setupTable() {
+        colMaHoKhau.setCellValueFactory(new PropertyValueFactory<>("maHoKhau"));
+        colPhiSinhHoat.setCellValueFactory(new PropertyValueFactory<>("phiSinhHoat"));
+        colPhiDichVu.setCellValueFactory(new PropertyValueFactory<>("phiDichVu"));
+        colPhiDongGop.setCellValueFactory(new PropertyValueFactory<>("phiDongGop"));
+        colTongCong.setCellValueFactory(new PropertyValueFactory<>("tongCong"));
 
-            // Lấy thông tin người + địa chỉ nhà họ đang ở
-            String sql = "SELECT nk.HoTen, nk.SoCMND_CCCD, nk.GioiTinh, hk.DiaChi " +
-                    "FROM nhankhau nk " +
-                    "JOIN hokhau hk ON nk.MaHoKhau = hk.MaHoKhau";
+        // Định dạng hiển thị số tiền (Ví dụ: 1,000,000 đ)
+        NumberFormat vnFormat = NumberFormat.getInstance(new Locale("vi", "VN"));
 
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                list.add(new SimpleNhanKhau(
-                        rs.getString("HoTen"),
-                        rs.getString("SoCMND_CCCD"),
-                        rs.getString("GioiTinh"),
-                        rs.getString("DiaChi")
-                ));
-            }
-
-            tableThongKe.setItems(list);
-            lblTongSo.setText(String.valueOf(list.size())); // Đếm tổng số
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        formatCurrencyColumn(colPhiSinhHoat, vnFormat);
+        formatCurrencyColumn(colPhiDichVu, vnFormat);
+        formatCurrencyColumn(colPhiDongGop, vnFormat);
+        formatCurrencyColumn(colTongCong, vnFormat);
     }
 
-    // Class đơn giản để hiển thị
-    public static class SimpleNhanKhau {
-        private final SimpleStringProperty hoTen;
-        private final SimpleStringProperty cccd;
-        private final SimpleStringProperty gioiTinh;
-        private final SimpleStringProperty diaChi;
+    // Helper để format cột tiền tệ
+    private void formatCurrencyColumn(TableColumn<ThongKeHoKhauModel, Double> col, NumberFormat format) {
+        col.setCellFactory(tc -> new TableCell<>() {
+            @Override
+            protected void updateItem(Double item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(format.format(item));
+                }
+            }
+        });
+    }
 
-        public SimpleNhanKhau(String ht, String cm, String gt, String dc) {
-            this.hoTen = new SimpleStringProperty(ht);
-            this.cccd = new SimpleStringProperty(cm);
-            this.gioiTinh = new SimpleStringProperty(gt);
-            this.diaChi = new SimpleStringProperty(dc);
-        }
+    private void loadData() {
+        // 1. Load Biểu đồ Nhân khẩu
+        Map<String, Integer> statsNK = ThongKeDAO.getNhanKhauStats();
+        ObservableList<PieChart.Data> pieData = FXCollections.observableArrayList(
+                new PieChart.Data("Thường trú", statsNK.get("ThuongTru")),
+                new PieChart.Data("Tạm trú", statsNK.get("TamTru")),
+                new PieChart.Data("Tạm vắng", statsNK.get("TamVang"))
+        );
+        pieChartNhanKhau.setData(pieData);
+        pieChartNhanKhau.setTitle("Tỷ lệ Cư trú");
 
-        public String getHoTen() { return hoTen.get(); }
-        public String getCccd() { return cccd.get(); }
-        public String getGioiTinh() { return gioiTinh.get(); }
-        public String getDiaChi() { return diaChi.get(); }
+        // 2. Load Biểu đồ Tài chính
+        Map<String, Double> statsThu = ThongKeDAO.getKhoanThuStats();
+        barChartKhoanThu.getData().clear();
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Tổng thu (VNĐ)");
+        series.getData().add(new XYChart.Data<>("Sinh Hoạt", statsThu.get("PhiSinhHoat")));
+        series.getData().add(new XYChart.Data<>("Dịch Vụ", statsThu.get("PhiDichVu")));
+        series.getData().add(new XYChart.Data<>("Đóng Góp", statsThu.get("PhiDongGop")));
+        barChartKhoanThu.getData().add(series);
+
+        // Hiển thị tổng tiền text
+        double total = statsThu.get("PhiSinhHoat") + statsThu.get("PhiDichVu") + statsThu.get("PhiDongGop");
+        NumberFormat vnFormat = NumberFormat.getInstance(new Locale("vi", "VN"));
+        lblTongThu.setText("TỔNG DÒNG TIỀN: " + vnFormat.format(total) + " VNĐ");
+
+        // 3. Load Bảng Chi Tiết (Theo Hộ Khẩu)
+        ObservableList<ThongKeHoKhauModel> tableList = FXCollections.observableArrayList(ThongKeDAO.getThongKeTheoHoKhau());
+        tableChiTiet.setItems(tableList);
+    }
+
+    @FXML
+    private void handleRefresh() {
+        loadData();
     }
 }
