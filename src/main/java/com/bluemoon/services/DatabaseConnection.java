@@ -9,8 +9,9 @@ public class DatabaseConnection {
     // 1. Thông tin kết nối
     // Nếu bạn dùng SQL Express, sửa localhost:1433 thành localhost\\SQLEXPRESS
     private static final String DB_URL = "jdbc:sqlserver://localhost:1433;"
-            + "databaseName=bluemoon_db;"
-            + "encrypt=true;trustServerCertificate=true;";
+            + "databaseName=BlueMoonDB;"
+            + "encrypt=true;"
+            + "trustServerCertificate=true;";
 
     // 2. Tài khoản SQL Server (đã kích hoạt ở Bước 1)
     private static final String USER = "sa";

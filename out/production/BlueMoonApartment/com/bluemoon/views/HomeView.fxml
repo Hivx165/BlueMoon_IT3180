@@ -35,7 +35,7 @@
 
                 <Label text="QUẢN LÝ DÂN CƯ" textFill="#95a5a6">
                     <font><Font name="System Bold" size="12.0" /></font>
-                    <VBox.margin><Insets left="20.0" top="15.0" bottom="5.0" /></VBox.margin>
+                    <VBox.margin><Insets bottom="5.0" left="20.0" top="15.0" /></VBox.margin>
                 </Label>
 
                 <Button mnemonicParsing="false" onAction="#handleNhanKhau" prefHeight="45.0" prefWidth="240.0" style="-fx-background-color: transparent; -fx-alignment: CENTER_LEFT; -fx-cursor: hand;" text="👥  Nhân khẩu" textFill="WHITE">
@@ -48,9 +48,18 @@
                     <font><Font size="14.0" /></font>
                 </Button>
 
+                <Button mnemonicParsing="false" onAction="#handleTamTru" prefHeight="45.0" prefWidth="240.0" style="-fx-background-color: transparent; -fx-alignment: CENTER_LEFT; -fx-cursor: hand;" text="📝  Tạm trú" textFill="WHITE">
+                    <padding><Insets left="40.0" /></padding>
+                    <font><Font size="14.0" /></font>
+                </Button>
+
+                <Button mnemonicParsing="false" onAction="#handleTamVang" prefHeight="45.0" prefWidth="240.0" style="-fx-background-color: transparent; -fx-alignment: CENTER_LEFT; -fx-cursor: hand;" text="✈️  Tạm vắng" textFill="WHITE">
+                    <padding><Insets left="40.0" /></padding>
+                    <font><Font size="14.0" /></font>
+                </Button>
                 <Label text="QUẢN LÝ KHOẢN THU" textFill="#95a5a6">
                     <font><Font name="System Bold" size="12.0" /></font>
-                    <VBox.margin><Insets left="20.0" top="15.0" bottom="5.0" /></VBox.margin>
+                    <VBox.margin><Insets bottom="5.0" left="20.0" top="15.0" /></VBox.margin>
                 </Label>
 
                 <Button mnemonicParsing="false" onAction="#handleThuPhi" prefHeight="45.0" prefWidth="240.0" style="-fx-background-color: transparent; -fx-alignment: CENTER_LEFT; -fx-cursor: hand;" text="💰  Phí Dịch Vụ" textFill="WHITE">
@@ -70,7 +79,7 @@
 
                 <Label text="BÁO CÁO &amp; THỐNG KÊ" textFill="#95a5a6">
                     <font><Font name="System Bold" size="12.0" /></font>
-                    <VBox.margin><Insets left="20.0" top="15.0" bottom="5.0" /></VBox.margin>
+                    <VBox.margin><Insets bottom="5.0" left="20.0" top="15.0" /></VBox.margin>
                 </Label>
 
                 <Button mnemonicParsing="false" onAction="#handleThongKe" prefHeight="45.0" prefWidth="240.0" style="-fx-background-color: transparent; -fx-alignment: CENTER_LEFT; -fx-cursor: hand;" text="📊  Thống kê Dân cư" textFill="WHITE">

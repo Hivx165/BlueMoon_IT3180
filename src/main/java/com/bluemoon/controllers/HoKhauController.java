@@ -1,5 +1,4 @@
 package com.bluemoon.controllers;
-
 import com.bluemoon.services.DatabaseConnection;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleObjectProperty;

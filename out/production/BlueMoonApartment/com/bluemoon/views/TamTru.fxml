@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.bluemoon.controllers.TamTruController">
+    <top>
+        <Label text="QUẢN LÝ TẠM TRÚ" BorderPane.alignment="CENTER">
+            <font><Font size="20"/></font>
+            <padding><Insets top="10" bottom="10"/></padding>
+        </Label>
+    </top>
+
+    <center>
+        <TableView fx:id="tableTamTru" prefHeight="300">
+            <columns>
+                <TableColumn fx:id="columnSoCCCD" text="Số CCCD" prefWidth="120"/>
+                <TableColumn fx:id="columnHoTen" text="Họ tên" prefWidth="150"/>
+                <TableColumn fx:id="columnDiaChiTamTru" text="Địa chỉ tạm trú" prefWidth="200"/>
+                <TableColumn fx:id="columnTuNgay" text="Từ ngày" prefWidth="120"/>
+                <TableColumn fx:id="columnDenNgay" text="Đến ngày" prefWidth="120"/>
+                <TableColumn fx:id="columnGhiChu" text="Ghi chú" prefWidth="150"/>
+            </columns>
+        </TableView>
+    </center>
+
+    <bottom>
+        <VBox spacing="10">
+            <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+            <GridPane hgap="10" vgap="10">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="30"/>
+                    <ColumnConstraints percentWidth="70"/>
+                </columnConstraints>
+
+                <rowConstraints>
+                    <RowConstraints vgrow="NEVER"/>
+                    <RowConstraints vgrow="NEVER"/>
+                    <RowConstraints vgrow="NEVER"/>
+                    <RowConstraints vgrow="NEVER"/>
+                    <RowConstraints vgrow="NEVER"/>
+                    <RowConstraints vgrow="ALWAYS"/>
+                </rowConstraints>
+
+                <Label text="Số CCCD:"/>
+                <HBox spacing="10" GridPane.columnIndex="1">
+                    <TextField fx:id="txtSoCCCD" HBox.hgrow="ALWAYS" promptText="Nhập CCCD cần tìm"/>
+                    <Button text="🔍 Tìm" onAction="#handleSearch" style="-fx-background-color: #3498db; -fx-text-fill: white;"/>
+                </HBox>
+
+                <Label text="Họ tên:" GridPane.rowIndex="1"/>
+                <TextField fx:id="txtHoTen" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                <Label text="Địa chỉ tạm trú:" GridPane.rowIndex="2"/>
+                <TextField fx:id="txtDiaChiTamTru" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                <Label text="Từ ngày:" GridPane.rowIndex="3"/>
+                <DatePicker fx:id="dateTuNgay" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                <Label text="Đến ngày:" GridPane.rowIndex="4"/>
+                <DatePicker fx:id="dateDenNgay" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+                <Label text="Ghi chú:" GridPane.rowIndex="5"/>
+                <TextArea fx:id="txtGhiChu" GridPane.columnIndex="1" GridPane.rowIndex="5" prefRowCount="3" wrapText="true"/>
+            </GridPane>
+
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Button text="Thêm / Cập nhật" fx:id="btnAdd" onAction="#handleAdd"/>
+                <Button text="Hủy Tạm Trú" fx:id="btnDelete" onAction="#handleDelete"/>
+                <Button text="Làm mới" fx:id="btnReset" onAction="#handleReset"/>
+            </HBox>
+        </VBox>
+    </bottom>
+</BorderPane>

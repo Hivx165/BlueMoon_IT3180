@@ -1,10 +1,9 @@
 package com.bluemoon.controllers;
 
-import com.bluemoon.services.DatabaseConnection;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-
+import com.bluemoon.services.DatabaseConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.time.LocalDate;
@@ -16,7 +15,6 @@ public class ThemNhanKhauController {
     @FXML private DatePicker dpNgaySinh;
     @FXML private ComboBox<String> cbGioiTinh;
 
-    // Các trường mới thêm
     @FXML private TextField tfSDT;
     @FXML private TextField tfQuanHe;
     @FXML private TextArea taGhiChu;
@@ -33,7 +31,6 @@ public class ThemNhanKhauController {
 
     @FXML
     private void handleSave() {
-        // 1. Kiểm tra các trường bắt buộc
         if (tfHoTen.getText().isEmpty() || tfCCCD.getText().isEmpty()) {
             showAlert("Lỗi", "Vui lòng nhập Họ tên và số CCCD/CMND!");
             return;
@@ -45,7 +42,6 @@ public class ThemNhanKhauController {
         }
 
         try {
-            // Lấy dữ liệu từ giao diện
             String hoTen = tfHoTen.getText();
             String cccd = tfCCCD.getText();
             LocalDate ngaySinhLocal = dpNgaySinh.getValue();
@@ -57,17 +53,16 @@ public class ThemNhanKhauController {
             String maHo = tfMaHoKhau.getText();
             String ghiChu = taGhiChu.getText();
 
-            // 2. Câu lệnh SQL mới (Bỏ TamTru, TamVang - Thêm SoDT, QuanHe, GhiChu)
+            // Ensure the SQL INSERT matches the schema
             String sql = "INSERT INTO nhankhau (SoCMND_CCCD, MaHoKhau, HoTen, NgaySinh, GioiTinh, " +
-                    "QueQuan, NgheNghiep, SoDT, QuanHe, GhiChu) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                     "QueQuan, NgheNghiep, SoDT, QuanHe, GhiChu) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             try (Connection conn = DatabaseConnection.getConnection();
                  PreparedStatement stmt = conn.prepareStatement(sql)) {
 
                 stmt.setString(1, cccd);
 
-                // Xử lý Mã hộ khẩu (nếu để trống thì là NULL)
                 if (maHo == null || maHo.trim().isEmpty()) {
                     stmt.setNull(2, java.sql.Types.VARCHAR);
                 } else {
@@ -75,13 +70,19 @@ public class ThemNhanKhauController {
                 }
 
                 stmt.setString(3, hoTen);
-                stmt.setDate(4, java.sql.Date.valueOf(ngaySinhLocal));
+
+                if (ngaySinhLocal == null) {
+                    stmt.setNull(4, java.sql.Types.DATE);
+                } else {
+                    stmt.setDate(4, java.sql.Date.valueOf(ngaySinhLocal));
+                }
+
                 stmt.setString(5, gioiTinh);
                 stmt.setString(6, queQuan);
                 stmt.setString(7, ngheNghiep);
-                stmt.setString(8, sdt);      // Cột SoDT
-                stmt.setString(9, quanHe);   // Cột QuanHe
-                stmt.setString(10, ghiChu);  // Cột GhiChu
+                stmt.setString(8, sdt);
+                stmt.setString(9, quanHe);
+                stmt.setString(10, ghiChu);
 
                 int rows = stmt.executeUpdate();
                 if (rows > 0) {

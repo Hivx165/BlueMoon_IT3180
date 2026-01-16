@@ -1,6 +1,5 @@
 package com.bluemoon.controllers; // 1. Khai báo Package
 
-// 2. Các thư viện cần thiết (Import)
 import com.bluemoon.services.DatabaseConnection;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -73,7 +72,11 @@ public class LoginController {
             stmt.setString(2, password);
 
             ResultSet rs = stmt.executeQuery();
-            return rs.next(); // Nếu có kết quả trả về -> Đăng nhập đúng
+            if (rs.next()) {
+                return true; // Nếu có kết quả trả về -> Đăng nhập đúng
+            } else {
+                return false; // Không có kết quả nào -> Đăng nhập sai
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

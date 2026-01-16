@@ -1,27 +1,36 @@
 package com.bluemoon.models;
 
+import java.time.LocalDate;
+
 public class NhanKhauModel {
     private String soCMND_CCCD;
     private String maHoKhau;
     private String hoTen;
-    private int tuoi;
+    private LocalDate ngaySinh;
     private String gioiTinh;
+    private String queQuan;
+    private String ngheNghiep;
     private String soDT;
-    private String quanHe; // Quan hệ với chủ hộ
-    private int isTamTru;  // 1: Có, 0: Không
-    private int isTamVang; // 1: Có, 0: Không
+    private String quanHe;
+    private int tamTru;  // 1: Có, 0: Không
+    private int tamVang; // 1: Có, 0: Không
+    private String ghiChu;
 
     // Constructor
-    public NhanKhauModel(String soCMND_CCCD, String maHoKhau, String hoTen, int tuoi, String gioiTinh, String soDT, String quanHe, int isTamTru, int isTamVang) {
+    public NhanKhauModel(String soCMND_CCCD, String maHoKhau, String hoTen, LocalDate ngaySinh, String gioiTinh,
+                         String queQuan, String ngheNghiep, String soDT, String quanHe, int tamTru, int tamVang, String ghiChu) {
         this.soCMND_CCCD = soCMND_CCCD;
         this.maHoKhau = maHoKhau;
         this.hoTen = hoTen;
-        this.tuoi = tuoi;
+        this.ngaySinh = ngaySinh;
         this.gioiTinh = gioiTinh;
+        this.queQuan = queQuan;
+        this.ngheNghiep = ngheNghiep;
         this.soDT = soDT;
         this.quanHe = quanHe;
-        this.isTamTru = isTamTru;
-        this.isTamVang = isTamVang;
+        this.tamTru = tamTru;
+        this.tamVang = tamVang;
+        this.ghiChu = ghiChu;
     }
 
     public NhanKhauModel() {}
@@ -36,11 +45,17 @@ public class NhanKhauModel {
     public String getHoTen() { return hoTen; }
     public void setHoTen(String hoTen) { this.hoTen = hoTen; }
 
-    public int getTuoi() { return tuoi; }
-    public void setTuoi(int tuoi) { this.tuoi = tuoi; }
+    public LocalDate getNgaySinh() { return ngaySinh; }
+    public void setNgaySinh(LocalDate ngaySinh) { this.ngaySinh = ngaySinh; }
 
     public String getGioiTinh() { return gioiTinh; }
     public void setGioiTinh(String gioiTinh) { this.gioiTinh = gioiTinh; }
+
+    public String getQueQuan() { return queQuan; }
+    public void setQueQuan(String queQuan) { this.queQuan = queQuan; }
+
+    public String getNgheNghiep() { return ngheNghiep; }
+    public void setNgheNghiep(String ngheNghiep) { this.ngheNghiep = ngheNghiep; }
 
     public String getSoDT() { return soDT; }
     public void setSoDT(String soDT) { this.soDT = soDT; }
@@ -48,9 +63,12 @@ public class NhanKhauModel {
     public String getQuanHe() { return quanHe; }
     public void setQuanHe(String quanHe) { this.quanHe = quanHe; }
 
-    public int getIsTamTru() { return isTamTru; }
-    public void setIsTamTru(int isTamTru) { this.isTamTru = isTamTru; }
+    public int getTamTru() { return tamTru; }
+    public void setTamTru(int tamTru) { this.tamTru = tamTru; }
 
-    public int getIsTamVang() { return isTamVang; }
-    public void setIsTamVang(int isTamVang) { this.isTamVang = isTamVang; }
+    public int getTamVang() { return tamVang; }
+    public void setTamVang(int tamVang) { this.tamVang = tamVang; }
+
+    public String getGhiChu() { return ghiChu; }
+    public void setGhiChu(String ghiChu) { this.ghiChu = ghiChu; }
 }

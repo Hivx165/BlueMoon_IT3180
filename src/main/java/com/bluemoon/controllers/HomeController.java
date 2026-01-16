@@ -1,5 +1,4 @@
 package com.bluemoon.controllers;
-
 import com.bluemoon.services.DatabaseConnection;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -86,6 +85,20 @@ public class HomeController {
         switchView("HoKhauView.fxml");
     }
 
+    // --- MỚI THÊM: Xử lý nút Tạm Trú ---
+    @FXML
+    private void handleTamTru(ActionEvent event) {
+        System.out.println(">> Click: Tạm Trú");
+        switchView("TamTru.fxml");
+    }
+
+    // --- MỚI THÊM: Xử lý nút Tạm Vắng ---
+    @FXML
+    private void handleTamVang(ActionEvent event) {
+        System.out.println(">> Click: Tạm Vắng");
+        switchView("TamVang.fxml");
+    }
+
     @FXML
     private void handleThuPhi(ActionEvent event) {
         System.out.println(">> Click: Phí Dịch Vụ");
@@ -135,11 +148,14 @@ public class HomeController {
     // --- HÀM CHUYỂN CẢNH DÙNG CHUNG ---
     private void switchView(String fxmlFileName) {
         try {
+            // LƯU Ý: Đảm bảo các file .fxml (TamTru.fxml, TamVang.fxml...)
+            // đều nằm trong thư mục /com/bluemoon/views/
             String path = "/com/bluemoon/views/" + fxmlFileName;
             URL fileUrl = getClass().getResource(path);
 
             if (fileUrl == null) {
                 System.err.println("❌ LỖI: Không tìm thấy file giao diện: " + path);
+                System.err.println("👉 Vui lòng kiểm tra xem file " + fxmlFileName + " đã ở trong package /views chưa.");
                 return;
             }
 

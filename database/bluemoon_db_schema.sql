@@ -43,7 +43,7 @@ CREATE TABLE nhankhau (
     SoCMND_CCCD VARCHAR(20) PRIMARY KEY,
     MaHoKhau VARCHAR(20),
     HoTen NVARCHAR(50) NOT NULL,
-    NgaySinh DATE NOT NULL,
+    NgaySinh DATE NOT NULL, -- Ensure this column exists
     GioiTinh NVARCHAR(10),
     QueQuan NVARCHAR(100),
     NgheNghiep NVARCHAR(50),

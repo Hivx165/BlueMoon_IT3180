@@ -1,37 +1,66 @@
 package com.bluemoon.models;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 public class TamVangModel {
-    private String maTamVang;
-    private String soCMND_CCCD;
-    private String noiTamTru;
-    private Date tuNgay;
-    private Date denNgay;
+    private String soCCCD;
+    private String hoTen;
+    private LocalDate tuNgay;
+    private LocalDate denNgay;
+    private String lyDo;
+    private LocalDate NgaySinh;
+    // No-args constructor
+    public TamVangModel() {
+        // Default constructor
+    }
 
-    public TamVangModel() {}
-
-    public TamVangModel(String maTamVang, String soCMND_CCCD, String noiTamTru, Date tuNgay, Date denNgay) {
-        this.maTamVang = maTamVang;
-        this.soCMND_CCCD = soCMND_CCCD;
-        this.noiTamTru = noiTamTru;
+    // Full-args constructor
+    public TamVangModel(String soCCCD, String hoTen, LocalDate tuNgay, LocalDate denNgay, String lyDo) {
+        this.soCCCD = soCCCD;
+        this.hoTen = hoTen;
         this.tuNgay = tuNgay;
+        this.denNgay = denNgay;
+        this.lyDo = lyDo;
+    }
+
+    // Getters and setters
+    public String getSoCCCD() {
+        return soCCCD;
+    }
+
+    public void setSoCCCD(String soCCCD) {
+        this.soCCCD = soCCCD;
+    }
+
+    public String getHoTen() {
+        return hoTen;
+    }
+
+    public void setHoTen(String hoTen) {
+        this.hoTen = hoTen;
+    }
+
+    public LocalDate getTuNgay() {
+        return tuNgay;
+    }
+
+    public void setTuNgay(LocalDate tuNgay) {
+        this.tuNgay = tuNgay;
+    }
+
+    public LocalDate getDenNgay() {
+        return denNgay;
+    }
+
+    public void setDenNgay(LocalDate denNgay) {
         this.denNgay = denNgay;
     }
 
-    // Getters and Setters
-    public String getMaTamVang() { return maTamVang; }
-    public void setMaTamVang(String maTamVang) { this.maTamVang = maTamVang; }
+    public String getLyDo() {
+        return lyDo;
+    }
 
-    public String getSoCMND_CCCD() { return soCMND_CCCD; }
-    public void setSoCMND_CCCD(String soCMND_CCCD) { this.soCMND_CCCD = soCMND_CCCD; }
-
-    public String getNoiTamTru() { return noiTamTru; }
-    public void setNoiTamTru(String noiTamTru) { this.noiTamTru = noiTamTru; }
-
-    public Date getTuNgay() { return tuNgay; }
-    public void setTuNgay(Date tuNgay) { this.tuNgay = tuNgay; }
-
-    public Date getDenNgay() { return denNgay; }
-    public void setDenNgay(Date denNgay) { this.denNgay = denNgay; }
+    public void setLyDo(String lyDo) {
+        this.lyDo = lyDo;
+    }
 }
