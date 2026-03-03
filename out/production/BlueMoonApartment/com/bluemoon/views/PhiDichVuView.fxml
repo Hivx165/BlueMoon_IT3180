@@ -44,9 +44,9 @@
                         <Button mnemonicParsing="false" onAction="#handleAdd" prefHeight="35.0" style="-fx-background-color: #2ecc71;" text="Tạo Phí Năm Nay" textFill="WHITE">
                             <font><Font name="System Bold" size="13.0" /></font>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#handleEdit" prefHeight="35.0" style="-fx-background-color: #9b59b6;" text="Cập nhật Đơn giá" textFill="WHITE">
-                            <font><Font name="System Bold" size="13.0" /></font>
-                        </Button>
+<!--                        <Button mnemonicParsing="false" onAction="#handleEdit" prefHeight="35.0" style="-fx-background-color: #9b59b6;" text="Cập nhật Đơn giá" textFill="WHITE">-->
+<!--                            <font><Font name="System Bold" size="13.0" /></font>-->
+<!--                        </Button>-->
                     </children>
                 </HBox>
             </children>
